@@ -21,45 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.entity;
+package com.dnastack.beacon.application;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import com.dnastack.beacon.rest.BeaconInfo;
+import com.dnastack.beacon.rest.BeaconQuery;
 
-/*
- * Dimensions of the data set (required if the beacon reports allele frequencies)
+import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Application;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * REST beacon application.
+ *
+ * @author Miroslav Cupak (mirocupak@gmail.com)
+ * @version 1.0
  */
-@XmlRootElement(name = "data-size")
-public class DataSize {
+@ApplicationPath("/")
+public class BeaconApplication extends Application {
 
-    private Integer variants;
-    private Integer samples;
-
-    public DataSize() {
-        // needed for JAXB
-    }
-
-    /*
-     * required field(s): variants
-     */
-    public DataSize(Integer variants, Integer samples) {
-        this.variants = variants;
-        this.samples = samples;
-    }
-
-    public Integer getVariants() {
-        return variants;
-    }
-
-    public void setVariants(Integer variants) {
-        this.variants = variants;
-    }
-
-    public Integer getSamples() {
-        return samples;
-    }
-
-    public void setSamples(Integer samples) {
-        this.samples = samples;
+    @Override
+    public Set<Class<?>> getClasses() {
+        return new HashSet<>(Arrays.asList(BeaconQuery.class, BeaconInfo.class));
     }
 
 }

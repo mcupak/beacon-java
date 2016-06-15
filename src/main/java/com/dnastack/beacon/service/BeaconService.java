@@ -23,8 +23,17 @@
  */
 package com.dnastack.beacon.service;
 
-import com.dnastack.beacon.entity.Beacon;
-import com.dnastack.beacon.entity.BeaconResponse;
+import com.dnastack.beacon.adapters.api.BeaconAdapter;
+import com.dnastack.beacon.adapters.exceptions.BeaconAdapterException;
+import org.apache.avro.AvroRemoteException;
+import org.ga4gh.beacon.Beacon;
+import org.ga4gh.beacon.BeaconAlleleRequest;
+import org.ga4gh.beacon.BeaconAlleleResponse;
+import org.ga4gh.beacon.BeaconMethods;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import java.util.List;
 
 /**
  * Beacon service.
@@ -32,24 +41,70 @@ import com.dnastack.beacon.entity.BeaconResponse;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public interface BeaconService {
+@Stateless
+public class BeaconService implements BeaconMethods {
+
 
     /**
-     * Executes a query.
-     *
-     * @param chrom   chromosome
-     * @param pos     position
-     * @param allele  allele
-     * @param ref     reference genome (optional)
-     * @param dataset dataset
-     * @return list of beacon responses
+     * Beacon adapter to be resolved at run time. The adapter defines how the beacon interacts with its datasource,
+     * making that configuration independant from the actual beacon itself
      */
-    BeaconResponse query(String chrom, Long pos, String allele, String ref, String dataset);
+    @Inject
+    private BeaconAdapter adapter;
 
     /**
-     * Obtains beacon information.
+     * Get a beacon allele response from the beacon
      *
-     * @return beacon
+     * @param referenceName
+     * @param start
+     * @param referenceBases
+     * @param alternateBases
+     * @param assemblyId
+     * @param datasetIds
+     * @param includeDatasetResponses
+     * @return Beacon allele response
+     * @throws AvroRemoteException
      */
-    Beacon info();
+    public BeaconAlleleResponse getBeaconAlleleResponse(String referenceName, Long start, String referenceBases, String alternateBases, String assemblyId, List<String> datasetIds, Boolean includeDatasetResponses) throws AvroRemoteException {
+        BeaconAlleleRequest request = new BeaconAlleleRequest();
+        request.setReferenceName(referenceName);
+        request.setReferenceBases(referenceBases);
+        request.setAlternateBases(alternateBases);
+        request.setStart(start);
+        request.setIncludeDatasetResponses(includeDatasetResponses);
+        request.setAssemblyId(assemblyId);
+        request.setDatasetIds(datasetIds);
+
+        return getBeaconAlleleResponse(request);
+    }
+
+    /**
+     * Retrieve general information defining this beacon
+     *
+     * @return
+     * @throws AvroRemoteException
+     */
+    @Override
+    public Beacon getBeacon() throws AvroRemoteException {
+        try {
+            return adapter.getBeaconResponse();
+        } catch (BeaconAdapterException e) {
+            return null;
+        }
+    }
+
+    /**
+     * @param beaconAlleleRequest
+     * @return
+     * @throws AvroRemoteException
+     */
+    @Override
+    public BeaconAlleleResponse getBeaconAlleleResponse(BeaconAlleleRequest beaconAlleleRequest) throws AvroRemoteException {
+        try {
+            return adapter.getAlleleResponse(beaconAlleleRequest);
+        } catch (BeaconAdapterException e) {
+            return null;
+        }
+    }
+
 }

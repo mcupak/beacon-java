@@ -21,56 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.entity;
+package com.dnastack.beacon.rest;
 
-import javax.xml.bind.annotation.XmlRootElement;
-import java.util.List;
+import com.dnastack.beacon.service.BeaconService;
+import org.apache.avro.AvroRemoteException;
+import org.ga4gh.beacon.Beacon;
+
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 /**
- * Data use limitations.
+ * Beacon rest resource.
+ *
+ * @author Miroslav Cupak (mirocupak@gmail.com)
+ * @author Patrick Magee    (patrickmageee@gmail.com)
+ * @version 1.0
  */
-@XmlRootElement(name = "data-use")
-public class DataUse {
+@Path("/")
+@Produces({MediaType.APPLICATION_JSON})
+public class BeaconInfo {
 
-    private String category;
-    private String description;
-    private List<DataUseRequirement> requirements;
+    @Inject
+    private BeaconService service;
 
-    public DataUse() {
-        // needed for JAXB
-    }
-
-    /*
-     * required field(s): category
+    /**
+     * Gets Information on the beacon
+     *
+     * @return Beacon represenation
+     * @throws AvroRemoteException
      */
-    public DataUse(String category, String description, List<DataUseRequirement> requirements) {
-        this.category = category;
-        this.description = description;
-        this.requirements = requirements;
+    @GET
+    public Beacon info() throws AvroRemoteException {
+        return service.getBeacon();
     }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public List<DataUseRequirement> getRequirements() {
-        return requirements;
-    }
-
-    public void setRequirements(List<DataUseRequirement> requirements) {
-        this.requirements = requirements;
-    }
-
 }

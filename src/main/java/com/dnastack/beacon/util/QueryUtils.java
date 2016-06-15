@@ -23,11 +23,10 @@
  */
 package com.dnastack.beacon.util;
 
-import com.dnastack.beacon.entity.Chromosome;
-import com.dnastack.beacon.entity.Query;
-import com.dnastack.beacon.entity.Reference;
+import org.ga4gh.beacon.BeaconAlleleRequest;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
@@ -132,20 +131,28 @@ public class QueryUtils {
     }
 
     /**
-     * Obtains a canonical query object.
-     *
-     * @param chrom   chromosome
-     * @param pos     position
-     * @param allele  allele
-     * @param ref     genome
-     * @param dataset dataset
-     * @return normalized query
+     * @param referenceName           name of chromosome or contig
+     * @param start                   0-based start position
+     * @param referenceBases          reference bases
+     * @param alternateBases          alternate bases
+     * @param assemblyId              genome assemlbly build id
+     * @param datasetIds
+     * @param includeDatasetResponses
+     * @return
      */
-    public static Query getQuery(String chrom, Long pos, String allele, String ref, String dataset) {
-        Chromosome c = normalizeChromosome(chrom);
-        Reference r = normalizeReference(ref);
+    public static BeaconAlleleRequest getQuery(String referenceName, Long start, String referenceBases, String alternateBases, String assemblyId, List<String> datasetIds, Boolean includeDatasetResponses) {
+        Chromosome chrom = normalizeChromosome(referenceName);
+        Reference assembly = normalizeReference(assemblyId);
 
-        return new Query(normalizeAllele(allele), c == null ? null : c, pos, r == null ? null : r, dataset);
+        BeaconAlleleRequest request = new BeaconAlleleRequest();
+        request.setReferenceName(chrom == null ? null : chrom.toString());
+        request.setStart(start);
+        request.setReferenceBases(normalizeAllele(referenceBases));
+        request.setAlternateBases(normalizeAllele(alternateBases));
+        request.setAssemblyId(assembly.toString());
+        request.setDatasetIds(datasetIds);
+        request.setIncludeDatasetResponses(includeDatasetResponses);
+        return request;
     }
 
 }

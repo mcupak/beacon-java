@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
+ * Copyright 2014 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,45 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.entity;
-
-import javax.xml.bind.annotation.XmlRootElement;
+package com.dnastack.beacon.util;
 
 /**
- * Data use requirement.
+ * Chromosome.
+ *
+ * @author Miroslav Cupak (mirocupak@gmail.com)
+ * @version 1.0
  */
-@XmlRootElement(name = "data-use-requirement")
-public class DataUseRequirement {
+public enum Chromosome {
 
-    private String name;
-    private String description;
+    // order is important!
+    CHR22("22"), CHR21("21"), CHR20("20"), CHR19("19"), CHR18("18"), CHR17("17"), CHR16("16"), CHR15("15"), CHR14("14"), CHR13("13"), CHR12("12"), CHR11("11"), CHR10("10"), CHR9("9"), CHR8("8"), CHR7("7"), CHR6("6"), CHR5("5"), CHR4("4"), CHR3("3"), CHR2("2"), CHR1("1"), CHRX("X"), CHRY("Y"), CHRMT("MT");
 
-    public DataUseRequirement() {
-        // needed for JAXB
+    private final String chrom;
+
+    Chromosome(String chrom) {
+        this.chrom = chrom;
     }
 
-    /*
-     * required field(s): name
-     */
-    public DataUseRequirement(String name, String description) {
-        this.name = name;
-        this.description = description;
+    public static Chromosome fromString(String text) {
+        if (text != null) {
+            for (Chromosome b : Chromosome.values()) {
+                if (text.equalsIgnoreCase(b.toString())) {
+                    return b;
+                }
+            }
+        }
+        return null;
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public String toString() {
+        return chrom;
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
 }

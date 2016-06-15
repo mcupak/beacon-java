@@ -1,6 +1,6 @@
-#Java Beacon
+# Java Beacon
 
-##Contents
+## Contents
 
 * [What it is](#what-it-is)
 * [System requirements](#system-requirements)
@@ -8,13 +8,13 @@
 * [How it works](#how-it-works)
 * [Technologies](#technologies)
 
-##What it is
-This project contains BDK (beacon development kit) for Java (EE) developers. It provides a skeleton of a simple beacon allowing the developers to plug in their own data/functionality. The API makes sure the response produced is compatible with what the Beacon of Beacons can consume.
+## What it is
+This project contains BDK (beacon development kit) for Java (EE) developers. It provides a rest implementation of a simple beacon allowing the developers to plug in their own data/functionality throught the use of the BeaconAdapter interface. The API ensure the respoinse is compliant with the Beacon Spec.
 
-##System requirements
-All you need to build this project is Java 7.0 (Java SDK 1.7) or later, Maven 3.0 or later. Since the project is Java EE based, an application server with support for Java EE 6 is needed to deploy the application (e.g. JBoss EAP or WildFly).
+## System requirements
+All you need to build this project is Java 8.0 (Java SDK 1.8) or later, Maven 3.0 or later. Since the project is Java EE based, an application server with support for Java EE 7 is needed to deploy the application (e.g. JBoss EAP or WildFly).
 
-##How to run it
+## How to run it
 Start the JBoss server:
 
     For Linux/Unix: JBOSS_HOME/bin/standalone.sh
@@ -30,7 +30,7 @@ In order to run the tests in a managed (remote) container, use the test-managed 
 
     mvn clean test -Ptest-managed
 
-##How it works
+## How it works
 The project provides the following:
 - API for beacons
 - sample beacon implementation
@@ -38,10 +38,12 @@ The project provides the following:
 - sample navigation webpage
 - sample testsuite
 
-In order to create your own beacon, we suggest you do the following:
-- implement BeaconService interface (replace the sample implementation provided in the SampleBeaconService class, you shouldn't need to touch any other classes in this project)
+##  Creating a beacon
+The beacon implementation is designed to use a beacon-adapter provided through the [beacon-java-adpaters-core](https://github.com/mcupak/beacon-adapters) project. The user can either extend the abstract BeaconAdapter class to create a custom implementation, or they can use one of the beacon-adapter implementations that are provided
+- Add your desired beacon adapter to the pom.xml in the commented out section
 - modify index.jsp to provide a landing page for your beacon (optional)
-- provide query with a YES and NO response in BeaconResourceTest class to make sure your beacon works (optional)
+- Deploy The beacon
+- Run the test-managed profile to ensure the beacon works and complies with the beacon spec
 
 The API takes care of the rest and provides the following endpoints upon deployment of your beacon:
 

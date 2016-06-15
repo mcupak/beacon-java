@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
+ * Copyright 2014 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,44 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.entity;
-
-import javax.xml.bind.annotation.XmlRootElement;
+package com.dnastack.beacon.util;
 
 /**
- * Error.
+ * Genome.
+ *
+ * @author Miroslav Cupak (mirocupak@gmail.com)
+ * @version 1.0
  */
-@XmlRootElement(name = "error")
-public class Error {
+public enum Reference {
 
-    private String name;
-    private String description;
+    HG38("hg38"), HG19("hg19"), HG18("hg18"), HG17("hg17"), HG16("hg16");
 
-    public Error() {
-        // needed for JAXB
+    private final String ref;
+
+    Reference(String ref) {
+        this.ref = ref;
     }
 
-    /*
-     * required field(s): name
-     */
-    public Error(String name, String description) {
-        this.name = name;
-        this.description = description;
+    public static Reference fromString(String text) {
+        if (text != null) {
+            for (Reference b : Reference.values()) {
+                if (text.equalsIgnoreCase(b.toString())) {
+                    return b;
+                }
+            }
+        }
+        return null;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    @Override
+    public String toString() {
+        return ref;
     }
 }
