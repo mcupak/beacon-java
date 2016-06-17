@@ -6,8 +6,6 @@ import org.ga4gh.beacon.*;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
-import javax.enterprise.inject.Alternative;
-import javax.enterprise.inject.Default;
 import java.util.Arrays;
 import java.util.Date;
 
