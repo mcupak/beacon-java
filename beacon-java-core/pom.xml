@@ -19,32 +19,41 @@
         </license>
     </licenses>
 
+    <developers>
+        <developer>
+            <id>patmagee</id>
+            <name>Patrick Magee</name>
+            <email>patrickmageee@gmail.com</email>
+            <url>https://github.com/patmagee</url>
+        </developer>
+    </developers>
+
     <dependencies>
-    <dependency>
-        <groupId>javax.enterprise</groupId>
-        <artifactId>cdi-api</artifactId>
-        <scope>provided</scope>
-    </dependency>
-    <dependency>
-        <groupId>javax</groupId>
-        <artifactId>javaee-api</artifactId>
-        <scope>provided</scope>
-    </dependency>
-    <dependency>
-        <groupId>org.jboss.spec.javax.annotation</groupId>
-        <artifactId>jboss-annotations-api_1.2_spec</artifactId>
-        <scope>provided</scope>
-    </dependency>
-    <dependency>
-        <groupId>org.jboss.resteasy</groupId>
-        <artifactId>jaxrs-api</artifactId>
-        <scope>provided</scope>
-    </dependency>
-    <dependency>
-        <groupId>org.ga4gh</groupId>
-        <artifactId>beacon</artifactId>
-        <version>${version.beacon.api}</version>
-    </dependency>
+        <dependency>
+            <groupId>javax.enterprise</groupId>
+            <artifactId>cdi-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.spec.javax.annotation</groupId>
+            <artifactId>jboss-annotations-api_1.2_spec</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>jaxrs-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.ga4gh</groupId>
+            <artifactId>beacon</artifactId>
+            <version>${version.beacon.api}</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>${project.artifactId}</finalName>

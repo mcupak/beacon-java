@@ -28,6 +28,12 @@
             <email>mirocupak@gmail.com</email>
             <url>https://github.com/mcupak</url>
         </developer>
+        <developer>
+            <id>patmagee</id>
+            <name>Patrick Magee</name>
+            <email>patrickmageee@gmail.com</email>
+            <url>https://github.com/patmagee</url>
+        </developer>
     </developers>
 
     <licenses>
