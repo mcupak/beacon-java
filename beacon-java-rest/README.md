@@ -6,6 +6,7 @@
 * [System requirements](#system-requirements)
 * [How to run it](#how-to-run-it)
 * [How it works](#how-it-works)
+* [Creating a Beacon](#creating-a-beacon)
 * [Technologies](#technologies)
 
 ##What it is
@@ -39,7 +40,10 @@ The project provides the following:
 - sample testsuite
 
 ##Creating a beacon
-The beacon implementation is designed to use a beacon-adapter provided through the [beacon-java-adpaters-core](https://github.com/mcupak/beacon-adapters) project. The user can either extend the abstract BeaconAdapter class to create a custom implementation, or they can use one of the beacon-adapter implementations that are provided
+The beacon implementation is designed to use a beacon-adapter provided through the [beacon-java-core](/beacon-java-core) project. The user can either extend the abstract BeaconAdapter class to create a custom implementation, or they can use one of the beacon-adapter implementations that are provided
+
+The user should first either remove the SampleBeaconAdapterImpl or remove the @Stateless annotation from above the class. The sample is intended to be a placeholder to allow the tests to be run, and to give the user an idea of how to implement a beacon. After this has been completely they are free to implement their own adapter.
+
 - Add your desired beacon adapter to the pom.xml in the commented out section
 - modify index.jsp to provide a landing page for your beacon (optional)
 - Deploy The beacon
@@ -47,7 +51,7 @@ The beacon implementation is designed to use a beacon-adapter provided through t
 
 The API takes care of the rest and provides the following endpoints upon deployment of your beacon:
 
-    http://localhost:8080/beacon-java/info - information about your beacon
+    http://localhost:8080/beacon-java/ - information about your beacon
     http://localhost:8080/beacon-java/query - access to query service
 
 ##Technologies
