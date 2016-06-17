@@ -55,6 +55,11 @@ public class BeaconServiceImpl implements BeaconService {
         if (referenceName == null || start == null || referenceBases == null || alternateBases == null || assemblyId == null) {
             throw new BeaconAlleleRequestException(Reason.INVALID_REQUEST, "Values cannot be null");
         }
+
+        if (includeDatasetResponses == null){
+            includeDatasetResponses = false;
+        }
+
         BeaconAlleleRequest request = new BeaconAlleleRequest();
         request.setReferenceName(referenceName);
         request.setReferenceBases(referenceBases);

@@ -25,6 +25,7 @@ package com.dnastack.beacon.rest.providers;
 
 
 import com.dnastack.beacon.rest.providers.util.ResponseMapping;
+import org.ga4gh.beacon.BeaconError;
 import org.json.simple.JSONObject;
 
 import javax.ws.rs.core.MediaType;
@@ -43,6 +44,7 @@ public class DefaultExceptionHandler implements ExceptionMapper<Exception> {
     /**
      * Default error handler to capture all errors and send the user a JSON response
      * with the status code, reason, message and stacktrace of the error
+     *
      * @param e exception
      * @return response with the status and error entity
      */
@@ -51,11 +53,9 @@ public class DefaultExceptionHandler implements ExceptionMapper<Exception> {
         JSONObject json = new JSONObject();
         Response.Status s = ResponseMapping.getStatus(e);
 
-        json.put("reason", s.getReasonPhrase());
-        json.put("status", s.getStatusCode());
-        json.put("message", e.getMessage());
-        json.put("stacktrace", Arrays.deepToString(e.getStackTrace()));
-
-        return Response.status(s).entity(json).type(MediaType.APPLICATION_JSON_TYPE).build();
+        BeaconError error = new BeaconError();
+        error.setMessage(e.getMessage());
+        error.setErrorCode(s.getStatusCode());
+        return Response.status(s).entity(error).type(MediaType.APPLICATION_JSON_TYPE).build();
     }
 }

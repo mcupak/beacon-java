@@ -1,8 +1,16 @@
 package com.dnastack.beacon.rest;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.jayway.restassured.RestAssured;
+import com.jayway.restassured.config.ObjectMapperConfig;
+import com.jayway.restassured.config.RestAssuredConfig;
 import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.internal.mapper.ObjectMapperType;
+import com.jayway.restassured.mapper.factory.GsonObjectMapperFactory;
 import org.ga4gh.beacon.Beacon;
+import org.ga4gh.beacon.BeaconAlleleRequest;
+import org.ga4gh.beacon.BeaconAlleleResponse;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
@@ -10,6 +18,7 @@ import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.archive.importer.MavenImporter;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
@@ -18,13 +27,16 @@ import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 
 import java.net.URL;
-import java.util.Arrays;
 
 import static com.jayway.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.not;
+
 
 /**
- * Created by patrickmagee on 2016-06-16.
+ * Test suite run in an arquillian container against a beacon implementation
+ *
+ * @author patrickmagee.
  */
 @RunWith(Arquillian.class)
 @RunAsClient
@@ -54,30 +66,313 @@ public class BeaconTests {
         return war;
     }
 
+    /**
+     * Set up the configuration of rest-assured to always use the Gson Object mapper
+     */
+    @BeforeClass
+    public static void config() {
+        RestAssured.config = RestAssuredConfig
+                .config()
+                .objectMapperConfig(new ObjectMapperConfig().gsonObjectMapperFactory(
+                        new GsonObjectMapperFactory() {
+                            public Gson create(Class cls, String charset) {
+                                return new GsonBuilder().create();
+                            }
+                        }
+                ));
+    }
+
+
+    /**
+     * Test if we can retrieve a beacon, and whether the beacon response is valid
+     */
     @Test
     public void testGetBeacon() {
 
-        System.out.println(given().accept(ContentType.JSON).get(baseUrl).then().extract().asString());
+        Beacon beacon = given()
+                .accept(ContentType.JSON)
+                .get(baseUrl)
+                .then()
+                .extract()
+                .as(Beacon.class, ObjectMapperType.GSON);
+        assertThat(beacon.getName()).isNotNull();
+        assertThat(beacon.getApiVersion()).isEqualTo(API_VERSION);
+        assertThat(beacon.getId()).isNotNull();
+        assertThat(beacon.getOrganization()).isNotNull();
+        assertThat(beacon.getDatasets().size()).isGreaterThanOrEqualTo(1);
     }
 
+
+    /**
+     * Ensure that posts to the beacon endpoint are not supported
+     */
+    @Test
+    public void testPostBeaconNotSupported() {
+        given().accept(ContentType.JSON).post(baseUrl).then().assertThat().statusCode(not(200));
+
+    }
+
+    /**
+     * Ensure that deletes to the beacon endpoint are not supported
+     */
+    @Test
+    public void testDeleteBeaconNotSupported() {
+        given().accept(ContentType.JSON).delete(baseUrl).then().assertThat().statusCode(not(200));
+    }
+
+    /**
+     * Ensure that puts to the beacon endpoint are not supported
+     */
+    @Test
+    public void testPutBeaconNotSupported() {
+        given().accept(ContentType.JSON).put(baseUrl).then().assertThat().statusCode(not(200));
+    }
+
+
+    /**
+     * Test to make sure that you can get a BeaconAlleleResponse from /query enpoint, and that it complies
+     * with the current beacon spec. Uses the sampleAlleleRequest provided by the beacon
+     */
     @Test
     public void testGetAllele() throws InterruptedException {
-        Thread.sleep(123123112);
-        String out = given()
+
+        Beacon beacon = given()
                 .accept(ContentType.JSON)
-                .queryParam("referenceName", "test")
-                .queryParam("start", 1231)
-                .queryParam("referenceBases", "ACA")
-                .queryParam("alternateBases", "SCSC")
-                .queryParam("assemblyId", "GRC123")
-                .queryParam("datasetIds", Arrays.asList("asd"))
-                .queryParam("includeDatasetResponses", true)
+                .get(baseUrl)
+                .then()
+                .extract()
+                .as(Beacon.class, ObjectMapperType.GSON);
+        BeaconAlleleRequest request = beacon.getSampleAlleleRequests().get(0);
+
+        BeaconAlleleResponse out = given()
+                .accept(ContentType.JSON)
+                .queryParam("referenceName", request.getReferenceName())
+                .queryParam("start", request.getStart())
+                .queryParam("referenceBases", request.getReferenceBases())
+                .queryParam("alternateBases", request.getAlternateBases())
+                .queryParam("assemblyId", request.getAssemblyId())
+                .queryParam("datasetIds", request.getDatasetIds())
+                .queryParam("includeDatasetResponses", request.getIncludeDatasetResponses())
                 .get(baseUrl + "query")
                 .then()
                 .extract()
-                .asString();
+                .as(BeaconAlleleResponse.class);
 
-        System.out.println(out);
+
+        assertThat(out.getAlleleRequest()).isEqualByComparingTo(request);
+        assertThat(out.getExists()).isTrue();
+        if (request.getIncludeDatasetResponses()) {
+            assertThat(out.getDatasetAlleleResponses()).isNotEmpty();
+        }
+        assertThat(out.getBeaconId()).isEqualTo(beacon.getId());
+        assertThat(out.getError()).isNull();
+    }
+
+    /**
+     * Test to make sure that you can post a BeaconAlleleResponse from /query enpoint, and that it complies
+     * with the current beacon spec. Uses the sampleAlleleRequest provided by the beacon
+     */
+    @Test
+    public void testPostAllele() {
+
+        Beacon beacon = given()
+                .accept(ContentType.JSON)
+                .get(baseUrl)
+                .then()
+                .extract()
+                .as(Beacon.class, ObjectMapperType.GSON);
+        BeaconAlleleRequest request = beacon.getSampleAlleleRequests().get(0);
+
+        BeaconAlleleResponse out = given()
+                .accept(ContentType.JSON)
+                .body(request)
+                .post(baseUrl + "query")
+                .then()
+                .extract()
+                .as(BeaconAlleleResponse.class);
+
+        assertThat(out.getAlleleRequest()).isEqualByComparingTo(request);
+        assertThat(out.getExists()).isTrue();
+        if (request.getIncludeDatasetResponses()) {
+            assertThat(out.getDatasetAlleleResponses()).isNotEmpty();
+        }
+        assertThat(out.getBeaconId()).isEqualTo(beacon.getId());
+        assertThat(out.getError()).isNull();
+
+    }
+
+    /**
+     * Test to ensure that Delete is not supported
+     */
+    @Test
+    public void testDeleteAlleleNotSupported() {
+        given().delete(baseUrl + "query").then().assertThat().statusCode(not(200));
+    }
+
+    /**
+     * Test to ensure that put is not supported
+     */
+    @Test
+    public void testPutAlleleNotSupported() {
+        given().put(baseUrl + "query").then().assertThat().statusCode(not(200));
+    }
+
+    /**
+     * Test to insure that a post with an invalid request returns a beacon error.
+     */
+    @Test
+    public void testPostInvalidRequest() {
+        Beacon beacon = given()
+                .accept(ContentType.JSON)
+                .get(baseUrl)
+                .then()
+                .extract()
+                .as(Beacon.class, ObjectMapperType.GSON);
+        BeaconAlleleRequest request = beacon.getSampleAlleleRequests().get(0);
+        request.setReferenceName(null);
+        request.setReferenceBases(null);
+
+        BeaconAlleleResponse out = given()
+                .accept(ContentType.JSON)
+                .body(request)
+                .post(baseUrl + "query")
+                .then()
+                .extract()
+                .as(BeaconAlleleResponse.class);
+
+        assertThat(out.getExists()).isNull();
+        assertThat(out.getError()).isNotNull();
+        assertThat(out.getError().getErrorCode()).isEqualTo(400);
+    }
+
+    /**
+     * Test to ensure that a get with missing required params returns a BeaconError
+     */
+    @Test
+    public void testGetAlleleWithMissingRequiredParams() {
+        Beacon beacon = given()
+                .accept(ContentType.JSON)
+                .get(baseUrl)
+                .then()
+                .extract()
+                .as(Beacon.class, ObjectMapperType.GSON);
+        BeaconAlleleRequest request = beacon.getSampleAlleleRequests().get(0);
+
+        BeaconAlleleResponse out = given()
+                .accept(ContentType.JSON)
+                .queryParam("referenceBases", request.getReferenceBases())
+                .queryParam("alternateBases", request.getAlternateBases())
+                .queryParam("assemblyId", request.getAssemblyId())
+                .queryParam("datasetIds", request.getDatasetIds())
+                .queryParam("includeDatasetResponses", request.getIncludeDatasetResponses())
+                .get(baseUrl + "query")
+                .then()
+                .extract()
+                .as(BeaconAlleleResponse.class);
+
+        assertThat(out.getExists()).isNull();
+        assertThat(out.getError()).isNotNull();
+        assertThat(out.getError().getErrorCode()).isEqualTo(400);
+    }
+
+    /**
+     * Test to makes sure that we can still get an allele response if optional parameters are not defined
+     */
+    @Test
+    public void testGetAlleleWithMissingOptionalParams() {
+        Beacon beacon = given()
+                .accept(ContentType.JSON)
+                .get(baseUrl)
+                .then()
+                .extract()
+                .as(Beacon.class, ObjectMapperType.GSON);
+        BeaconAlleleRequest request = beacon.getSampleAlleleRequests().get(0);
+
+        BeaconAlleleResponse out = given()
+                .accept(ContentType.JSON)
+                .queryParam("referenceName", request.getReferenceName())
+                .queryParam("start", request.getStart())
+                .queryParam("referenceBases", request.getReferenceBases())
+                .queryParam("alternateBases", request.getAlternateBases())
+                .queryParam("assemblyId", request.getAssemblyId())
+                .queryParam("datasetIds", request.getDatasetIds())
+                .get(baseUrl + "query")
+                .then()
+                .extract()
+                .as(BeaconAlleleResponse.class);
+
+        assertThat(out.getAlleleRequest()).isEqualByComparingTo(request);
+        assertThat(out.getExists()).isTrue();
+        assertThat(out.getDatasetAlleleResponses()).isNullOrEmpty();
+
+    }
+
+
+    /**
+     * Test to ensure that we can retrieve an allele with the datasets listed
+     */
+    @Test
+    public void testGetAlleleWithDataSets() {
+        Beacon beacon = given()
+                .accept(ContentType.JSON)
+                .get(baseUrl)
+                .then()
+                .extract()
+                .as(Beacon.class, ObjectMapperType.GSON);
+        BeaconAlleleRequest request = beacon.getSampleAlleleRequests().get(0);
+
+        BeaconAlleleResponse out = given()
+                .accept(ContentType.JSON)
+                .queryParam("referenceName", request.getReferenceName())
+                .queryParam("start", request.getStart())
+                .queryParam("referenceBases", request.getReferenceBases())
+                .queryParam("alternateBases", request.getAlternateBases())
+                .queryParam("assemblyId", request.getAssemblyId())
+                .queryParam("datasetIds", request.getDatasetIds())
+                .queryParam("includeDatasetResponses", request.getIncludeDatasetResponses())
+                .get(baseUrl + "query")
+                .then()
+                .extract()
+                .as(BeaconAlleleResponse.class);
+        assertThat(out.getAlleleRequest()).isEqualByComparingTo(request);
+        assertThat(out.getExists()).isTrue();
+        assertThat(out.getDatasetAlleleResponses()).isNotNull();
+        assertThat(out.getDatasetAlleleResponses()).isNotEmpty();
+
+    }
+
+    /**
+     * Test to ensure that we can retrieve an allele without the datasets listed
+     */
+    @Test
+    public void testGetAlleleWithoutDatasets() {
+        Beacon beacon = given()
+                .accept(ContentType.JSON)
+                .get(baseUrl)
+                .then()
+                .extract()
+                .as(Beacon.class, ObjectMapperType.GSON);
+        BeaconAlleleRequest request = beacon.getSampleAlleleRequests().get(0);
+
+        BeaconAlleleResponse out = given()
+                .accept(ContentType.JSON)
+                .queryParam("referenceName", request.getReferenceName())
+                .queryParam("start", request.getStart())
+                .queryParam("referenceBases", request.getReferenceBases())
+                .queryParam("alternateBases", request.getAlternateBases())
+                .queryParam("assemblyId", request.getAssemblyId())
+                .queryParam("datasetIds", request.getDatasetIds())
+                .queryParam("includeDatasetResponses", false)
+                .queryParam("includeDatasetResponses", false)
+                .get(baseUrl + "query")
+                .then()
+                .extract()
+                .as(BeaconAlleleResponse.class);
+
+        assertThat(out.getAlleleRequest()).isEqualByComparingTo(request);
+        assertThat(out.getExists()).isTrue();
+        assertThat(out.getDatasetAlleleResponses()).isNullOrEmpty();
+        assertThat(out.getDatasetAlleleResponses()).isNullOrEmpty();
     }
 
 }
