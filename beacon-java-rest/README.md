@@ -4,7 +4,6 @@
 
 * [What it is](#what-it-is)
 * [System requirements](#system-requirements)
-* [Modules](#Modules)
 * [How to run it](#how-to-run-it)
 * [How it works](#how-it-works)
 * [Technologies](#technologies)
@@ -14,13 +13,6 @@ This project contains BDK (beacon development kit) for Java (EE) developers. It 
 
 ##System requirements
 All you need to build this project is Java 8.0 (Java SDK 1.8) or later, Maven 3.0 or later. Since the project is Java EE based, an application server with support for Java EE 7 is needed to deploy the application (e.g. JBoss EAP or WildFly).
-
-##Modules
-1. [beacon-java-core](/beacon-java-core)
-    Contains core classes and functions shared across modules in the BJDK.
-2. [beacon-java-rest](/beacon-java-rest)
-    Rest implementation of a beacon, configured to run on a JBOSS server.
-
 
 ##How to run it
 Start the JBoss server:
