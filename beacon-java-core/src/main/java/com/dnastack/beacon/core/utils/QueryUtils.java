@@ -195,7 +195,7 @@ public class QueryUtils {
      */
     public static void validateRequest(BeaconAlleleRequest request) throws BeaconAlleleRequestException {
 
-        if (request.getReferenceName() != null || !isValidReference(request.getReferenceName())) {
+        if (request.getReferenceName() == null || !isValidReference(request.getReferenceName())) {
             throw new BeaconAlleleRequestException("Invalid reference passed in request", Reason.INVALID_REQUEST, request);
         } else if (request.getStart() == null || request.getStart() < 0) {
             throw new BeaconAlleleRequestException("Invalid start position in request", Reason.INVALID_REQUEST, request);

@@ -46,17 +46,6 @@ The project provides the following:
 - sample navigation webpage
 - sample testsuite
 
-##Creating a beacon
-The beacon implementation is designed to use a beacon-adapter provided through the [beacon-java-adpaters-core](https://github.com/mcupak/beacon-adapters) project. The user can either extend the abstract BeaconAdapter class to create a custom implementation, or they can use one of the beacon-adapter implementations that are provided
-- Add your desired beacon adapter to the pom.xml in the commented out section
-- modify index.jsp to provide a landing page for your beacon (optional)
-- Deploy The beacon
-- Run the test-managed profile to ensure the beacon works and complies with the beacon spec
-
-The API takes care of the rest and provides the following endpoints upon deployment of your beacon:
-
-    http://localhost:8080/beacon-java/info - information about your beacon
-    http://localhost:8080/beacon-java/query - access to query service
 
 ##Technologies
 Java EE. CDI, JAX-RS, JAXB. Tested with Arquillian/ShrinkWrap.
