@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.service;
+package com.dnastack.beacon.core.service.api;
 
-import com.dnastack.beacon.core.adapter.exception.BeaconAlleleRequestException;
-import com.dnastack.beacon.core.adapter.exception.BeaconException;
+import com.dnastack.beacon.exceptions.BeaconAlleleRequestException;
+import com.dnastack.beacon.exceptions.BeaconException;
 import org.apache.avro.AvroRemoteException;
 import org.ga4gh.beacon.Beacon;
 import org.ga4gh.beacon.BeaconAlleleRequest;
@@ -42,15 +42,15 @@ public interface BeaconService {
 
 
     /**
-     * Get a beacon allele response from the beacon.
+     * Get a beacon allele response from a beacon allele request.
      *
-     * @param referenceName
-     * @param start
-     * @param referenceBases
-     * @param alternateBases
-     * @param assemblyId
-     * @param datasetIds
-     * @param includeDatasetResponses
+     * @param referenceName           Not null chromosome name
+     * @param start                   Not null start position
+     * @param referenceBases          Not null reference bases
+     * @param alternateBases          Not null
+     * @param assemblyId              Not null assembly version prefixed with GRCh
+     * @param datasetIds              Dataset Ids to search, if null search all
+     * @param includeDatasetResponses Include datasets in return.
      * @return Beacon allele response
      * @throws AvroRemoteException
      */
@@ -59,7 +59,7 @@ public interface BeaconService {
     /**
      * Get a beacon allele response from the beacon, given a BeaconAlleleRequest
      *
-     * @param request
+     * @param request Not null request object
      * @return
      * @throws BeaconAlleleRequestException
      */
@@ -67,7 +67,7 @@ public interface BeaconService {
 
 
     /**
-     * Get beacon information.
+     * Get information for a single beacon.
      *
      * @return
      * @throws BeaconException

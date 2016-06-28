@@ -6,10 +6,6 @@
          version="3.0">
     <distributable/>
 
-    <welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>
-    </welcome-file-list>
-
     <context-param>
         <param-name>resteasy.scan</param-name>
         <param-value>true</param-value>
@@ -19,8 +15,8 @@
         <!--<param-name>resteasy.providers</param-name>-->
         <!--&lt;!&ndash;<param-value>true</param-value>&ndash;&gt;-->
         <!--<param-value>-->
-            <!--com.dnastack.beacon.rest.providers.GsonMessageBodyHandler,-->
-            <!--com.dnastack.beacon.rest.providers.DefaultExceptionHandler-->
+            <!--com.dnastack.beacon.providers.GsonMessageBodyHandler,-->
+            <!--com.dnastack.beacon.providers.DefaultExceptionHandler-->
         <!--</param-value>-->
     <!--</context-param>-->
     <!--<context-param>-->
@@ -30,7 +26,7 @@
 
     <!--<context-param>-->
         <!--<param-name>resteasy.providers</param-name>-->
-        <!--<param-value>com.dnastack.beacon.rest.providers.DefaultExceptionHandler,com.dnastack.beacon.rest.providers.GsonMessageBodyHandler</param-value>-->
+        <!--<param-value>com.dnastack.beacon.providers.DefaultExceptionHandler,com.dnastack.beacon.providers.GsonMessageBodyHandler</param-value>-->
     <!--</context-param>-->
 
 

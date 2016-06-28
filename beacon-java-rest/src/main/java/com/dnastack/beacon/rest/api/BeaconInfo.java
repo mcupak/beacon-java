@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 DNAstack.
+ * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,37 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.core.utils;
+package com.dnastack.beacon.rest.api;
+
+import com.dnastack.beacon.exceptions.BeaconException;
+import org.ga4gh.beacon.Beacon;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 /**
- * Genome.
+ * Beacon rest resource.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
+ * @author Patrick Magee    (patrickmageee@gmail.com)
  * @version 1.0
  */
-public enum Reference {
+@Path("/")
+public interface BeaconInfo {
 
-    HG38("hg38"), HG19("hg19"), HG18("hg18"), HG17("hg17"), HG16("hg16");
-
-    private final String ref;
-
-    Reference(String ref) {
-        this.ref = ref;
-    }
-
-    public static Reference fromString(String text) {
-        if (text != null) {
-            for (Reference b : Reference.values()) {
-                if (text.equalsIgnoreCase(b.toString())) {
-                    return b;
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public String toString() {
-        return ref;
-    }
+    /**
+     * Gets Information on the beacon
+     *
+     * @return Beacon represenation
+     * @throws BeaconException
+     */
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    Beacon info() throws BeaconException;
 }

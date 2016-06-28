@@ -21,15 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.rest;
+package com.dnastack.beacon.rest.api;
 
-import com.dnastack.beacon.core.adapter.exception.BeaconException;
-import com.dnastack.beacon.service.BeaconService;
-import org.apache.avro.AvroRemoteException;
+import com.dnastack.beacon.exceptions.BeaconException;
 import org.ga4gh.beacon.BeaconAlleleRequest;
 import org.ga4gh.beacon.BeaconAlleleResponse;
 
-import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
@@ -42,11 +39,8 @@ import java.util.List;
  * @version 1.0
  */
 @Path("/query")
-@Produces({MediaType.APPLICATION_JSON})
-public class BeaconQuery {
+public interface BeaconQuery {
 
-    @Inject
-    private BeaconService service;
 
     /**
      * Query a beacon resource for information on whether an allele exists or not. Optionally includes the datasets.
@@ -61,18 +55,17 @@ public class BeaconQuery {
      * @param datasetIds              List of dataset Ids
      * @param includeDatasetResponses Boolean value to include Dataset responses
      * @return Completed Beacon response object
-     * @throws AvroRemoteException
+     * @throws BeaconException
      */
     @GET
-    public BeaconAlleleResponse query(@QueryParam("referenceName") String referenceName,
-                                      @QueryParam("start") Long start,
-                                      @QueryParam("referenceBases") String referenceBases,
-                                      @QueryParam("alternateBases") String alternateBases,
-                                      @QueryParam("assemblyId") String assemblyId,
-                                      @QueryParam("datasetIds") List<String> datasetIds,
-                                      @QueryParam("includeDatasetResponses") Boolean includeDatasetResponses) throws BeaconException {
-        return service.queryAllele(referenceName, start, referenceBases, alternateBases, assemblyId, datasetIds, includeDatasetResponses);
-    }
+    @Produces({MediaType.APPLICATION_JSON})
+    BeaconAlleleResponse query(@QueryParam("referenceName") String referenceName,
+                               @QueryParam("start") Long start,
+                               @QueryParam("referenceBases") String referenceBases,
+                               @QueryParam("alternateBases") String alternateBases,
+                               @QueryParam("assemblyId") String assemblyId,
+                               @QueryParam("datasetIds") List<String> datasetIds,
+                               @QueryParam("includeDatasetResponses") Boolean includeDatasetResponses) throws BeaconException;
 
     /**
      * Query a beacon resource for information on whether an allele exists or not. Optionally includes the datasets.
@@ -81,11 +74,12 @@ public class BeaconQuery {
      *
      * @param request Completed Beacon response object
      * @return
-     * @throws AvroRemoteException
+     * @throws BeaconException
      */
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
-    public BeaconAlleleResponse query(BeaconAlleleRequest request) throws BeaconException {
-        return service.queryAllele(request);
-    }
+    @Produces({MediaType.APPLICATION_JSON})
+    BeaconAlleleResponse query(BeaconAlleleRequest request) throws BeaconException;
+
+
 }

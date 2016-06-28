@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.rest.providers;
+package com.dnastack.beacon.providers;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -41,7 +41,7 @@ import java.lang.reflect.Type;
 /**
  * Gson Message Body Handler for serializing JSON data to and from auto generated Java classes
  *
- * @author Patrick Magee    (patrickmageee@gmail.com)
+ * @author patmagee
  * @version 1.0
  */
 @Provider

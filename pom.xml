@@ -11,8 +11,9 @@
     <name>beacon-java</name>
 
     <modules>
-        <module>beacon-java-rest</module>
         <module>beacon-java-core</module>
+        <module>sample-beacon-adapter</module>
+        <module>beacon-java-rest</module>
     </modules>
 
     <scm>
@@ -61,9 +62,9 @@
         <version.gson>2.3.1</version.gson>
         <version.beacon.api>0.3.0</version.beacon.api>
         <version.restassured>2.9.0</version.restassured>
-        <version.beacon.adapters.core>1.0-SNAPSHOT</version.beacon.adapters.core>
         <version.json.simple>1.1.1</version.json.simple>
         <version.assertj>3.4.1</version.assertj>
+        <version.beacon.adapter.api>1.0-SNAPSHOT</version.beacon.adapter.api>
     </properties>
 
     <dependencyManagement>
@@ -134,36 +135,38 @@
             </dependency>
             <dependency>
                 <groupId>com.dnastack</groupId>
-                <artifactId>beacon-java-adapters-core</artifactId>
-                <version>${version.beacon.adapters.core}</version>
+                <artifactId>beacon-adapter-api</artifactId>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
 
     <build>
         <finalName>${project.artifactId}</finalName>
-        <plugins>
-            <plugin>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>${version.war.plugin}</version>
-            </plugin>
-            <plugin>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>${version.jar.plugin}</version>
-            </plugin>
-            <plugin>
-                <groupId>org.wildfly.plugins</groupId>
-                <artifactId>wildfly-maven-plgin</artifactId>
-                <version>${version.wildfly.maven.plugin}</version>
-            </plugin>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${version.compiler.plugin}</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>${version.war.plugin}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${version.jar.plugin}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.wildfly.plugins</groupId>
+                    <artifactId>wildfly-maven-plgin</artifactId>
+                    <version>${version.wildfly.maven.plugin}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${version.compiler.plugin}</version>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 </project>

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 DNAstack.
+ * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,41 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.rest.providers;
+package com.dnastack.beacon.rest.impl;
 
+import com.dnastack.beacon.core.service.api.BeaconService;
+import com.dnastack.beacon.exceptions.BeaconException;
+import com.dnastack.beacon.rest.api.BeaconQuery;
+import org.ga4gh.beacon.BeaconAlleleRequest;
+import org.ga4gh.beacon.BeaconAlleleResponse;
 
-import com.dnastack.beacon.rest.providers.util.ResponseMapping;
-import org.ga4gh.beacon.BeaconError;
-import org.json.simple.JSONObject;
-
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
-import java.util.Arrays;
+import javax.inject.Inject;
+import javax.ws.rs.Path;
+import java.util.List;
 
 /**
- * Created by patrickmagee on 2016-06-16.
+ * Beacon Query Implementation
  */
+@Path("/query")
+public class BeaconQueryImpl implements BeaconQuery {
 
-@Provider
-public class DefaultExceptionHandler implements ExceptionMapper<Exception> {
+    @Inject
+    private BeaconService service;
 
     /**
-     * Default error handler to capture all errors and send the user a JSON response
-     * with the status code, reason, message and stacktrace of the error
-     *
-     * @param e exception
-     * @return response with the status and error entity
+     * {@inheritDoc}
      */
     @Override
-    public Response toResponse(Exception e) {
-        JSONObject json = new JSONObject();
-        Response.Status s = ResponseMapping.getStatus(e);
+    public BeaconAlleleResponse query(String referenceName, Long start, String referenceBases, String alternateBases, String assemblyId, List<String> datasetIds, Boolean includeDatasetResponses) throws BeaconException {
+        return service.queryAllele(referenceName, start, referenceBases, alternateBases, assemblyId, datasetIds, includeDatasetResponses);
+    }
 
-        BeaconError error = new BeaconError();
-        error.setMessage(e.getMessage());
-        error.setErrorCode(s.getStatusCode());
-        return Response.status(s).entity(error).type(MediaType.APPLICATION_JSON_TYPE).build();
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public BeaconAlleleResponse query(BeaconAlleleRequest request) throws BeaconException {
+        return service.queryAllele(request);
     }
 }

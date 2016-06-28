@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 DNAstack.
+ * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,38 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.core.utils;
+package com.dnastack.beacon.rest.impl;
+
+import com.dnastack.beacon.core.service.api.BeaconService;
+import com.dnastack.beacon.exceptions.BeaconException;
+import com.dnastack.beacon.rest.api.BeaconInfo;
+import org.ga4gh.beacon.Beacon;
+
+import javax.inject.Inject;
+import javax.ws.rs.Path;
 
 /**
- * Chromosome.
- *
- * @author Miroslav Cupak (mirocupak@gmail.com)
- * @version 1.0
+ * Beacon Info Implementation
  */
-public enum Chromosome {
+@Path("/")
+public class BeaconInfoImpl implements BeaconInfo {
 
-    // order is important!
-    CHR22("22"), CHR21("21"), CHR20("20"), CHR19("19"), CHR18("18"), CHR17("17"), CHR16("16"), CHR15("15"), CHR14("14"), CHR13("13"), CHR12("12"), CHR11("11"), CHR10("10"), CHR9("9"), CHR8("8"), CHR7("7"), CHR6("6"), CHR5("5"), CHR4("4"), CHR3("3"), CHR2("2"), CHR1("1"), CHRX("X"), CHRY("Y"), CHRMT("MT");
+    @Inject
+    private BeaconService service;
 
-    private final String chrom;
-
-    Chromosome(String chrom) {
-        this.chrom = chrom;
-    }
-
-    public static Chromosome fromString(String text) {
-        if (text != null) {
-            for (Chromosome b : Chromosome.values()) {
-                if (text.equalsIgnoreCase(b.toString())) {
-                    return b;
-                }
-            }
-        }
-        return null;
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public String toString() {
-        return chrom;
+    public Beacon info() throws BeaconException {
+        return service.queryBeacon();
     }
 }

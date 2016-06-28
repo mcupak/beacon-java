@@ -113,14 +113,19 @@
             <artifactId>beacon-java-core</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <!--
-        Your Beacon Adapter here
         <dependency>
-            <groupId></groupId>
-            <artifactId></artifactId>
-            <version></version>
+            <groupId>com.dnastack</groupId>
+            <artifactId>beacon-adapter-api</artifactId>
         </dependency>
-        -->
+
+        <!-- Sample Beacon Adapter -->
+        <dependency>
+            <groupId>com.dnastack</groupId>
+            <artifactId>sample-beacon-adapter</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- End your sample beacon adapter -->
+
     </dependencies>
 
     <build>
