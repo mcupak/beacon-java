@@ -30,8 +30,7 @@ import org.ga4gh.beacon.*;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
-import java.util.Arrays;
-import java.util.Date;
+import java.util.*;
 
 /**
  * Created by patrickmagee on 2016-06-17.
@@ -39,50 +38,111 @@ import java.util.Date;
 @Stateless
 public class SampleBeaconAdapterImpl extends BeaconAdapter {
 
-    private static final String API_VERSION = "0.3.0";
+    public static final String API_VERSION = "0.3.0";
+    public static final String BEACON_ID = "beacon_id";
+    public static final String DATASET_ID = "dataset_id";
+    public static final String ORG_ID = "org_id";
 
-    private Beacon beacon;
-    private BeaconDataset dataset;
-    private BeaconOrganization organization;
-    private BeaconDatasetAlleleResponse datasetResponse;
-    private BeaconAlleleRequest request;
-    private BeaconAlleleResponse response;
-
+    private SampleDataStore dataStore;
 
     @Override
     @PostConstruct
     public void init() {
-
-        request = createSampleRequest();
-        organization = createSampleOrganization();
-        dataset = createSampleBeaconDataset();
-        datasetResponse = createSampleDatasetResponse();
-        beacon = createSampleBeacon();
-        response = createSampleResponse();
-
+        dataStore = new SampleDataStore();
     }
 
     @Override
     public BeaconAlleleResponse getAlleleResponse(BeaconAlleleRequest request) throws BeaconException {
+
+        BeaconAlleleResponse response = new BeaconAlleleResponse();
+        response.setBeaconId(BEACON_ID);
         response.setAlleleRequest(request);
 
-        if (request.getIncludeDatasetResponses()) {
-            response.setDatasetAlleleResponses(Arrays.asList(datasetResponse));
-        } else {
-            response.setDatasetAlleleResponses(null);
+        List<BeaconDatasetAlleleResponse> responses = new ArrayList<>();
+        for (String datasetId : request.getDatasetIds()) {
+            responses.add(lookupDataset(datasetId, request.getAssemblyId(), request.getReferenceName(), request.getStart(), request
+                    .getReferenceBases(), request.getAlternateBases()));
         }
 
+        if (!request.getIncludeDatasetResponses() && responses.size() == 1 && responses.get(0).getError() != null) {
+            response.setExists(null);
+            response.setError(responses.get(0).getError());
+        } else if (request.getIncludeDatasetResponses()) {
+            response.setDatasetAlleleResponses(responses);
+        }
+        boolean exists = false;
+        for (BeaconDatasetAlleleResponse datasetResponses : responses) {
+            if (datasetResponses.getExists() == true) {
+                exists = true;
+            }
+        }
+        response.setExists(exists);
         return response;
     }
 
-    @Override
-    public Beacon getBeaconResponse() throws BeaconException {
-        createSampleResponse();
-        createSampleBeacon();
+    private BeaconDatasetAlleleResponse lookupDataset(String datasetId, String assemblyId, String referencName, long start, String refBases, String altBases) {
+        BeaconDatasetAlleleResponse response = new BeaconDatasetAlleleResponse();
+        response.setDatasetId(datasetId);
 
-        return beacon;
+        Map<String, Map> dataset = dataStore.getDATA().get(datasetId);
+        if (dataset == null) {
+            BeaconError be = new BeaconError();
+            be.setErrorCode(404);
+            be.setMessage("Could not find dataset");
+
+            response.setExists(null);
+            response.setError(be);
+
+            return response;
+        }
+        Map<String, Map> assembly = ((Map) dataset.get(assemblyId));
+        if (assembly == null) {
+            BeaconError be = new BeaconError();
+            be.setErrorCode(404);
+            be.setMessage("Could not find assembly in current dataset");
+
+            response.setExists(null);
+            response.setError(be);
+
+            return response;
+        }
+        Map<Long, Map> reference = ((Map) assembly.get(referencName));
+        if (reference == null) {
+            response.setExists(null);
+            return addInfo(response);
+        }
+        Map<String, String> bases = ((Map) reference.get(start));
+        if (bases == null) {
+            response.setExists(false);
+            return addInfo(response);
+        }
+        if (bases.get("referenceBases").equals(refBases) && bases.get("alternateBases").equals(altBases)) {
+            response.setExists(true);
+            return addInfo(response);
+        } else {
+            response.setExists(false);
+            return addInfo(response);
+        }
     }
 
+    private BeaconDatasetAlleleResponse addInfo(BeaconDatasetAlleleResponse datasetResponse) {
+        datasetResponse.setCallCount(1l);
+        datasetResponse.setFrequency(0.221);
+        datasetResponse.setVariantCount(1l);
+        datasetResponse.setSampleCount(1l);
+        datasetResponse.setExternalUrl("www.google.com");
+        datasetResponse.setNote("This is a sample beacon only");
+        Map<String, String> info = new HashMap<>();
+        info.put("note", "Sample Beacon only");
+        datasetResponse.setInfo(info);
+        return datasetResponse;
+    }
+
+
+    @Override
+    public Beacon getBeaconResponse() throws BeaconException {
+        return createSampleBeacon();
+    }
 
     private Beacon createSampleBeacon() {
         Beacon beacon = new Beacon();
@@ -92,54 +152,44 @@ public class SampleBeaconAdapterImpl extends BeaconAdapter {
         beacon.setName("Sample Beacon");
         beacon.setAlternativeUrl("www.google.ca");
         beacon.setWelcomeUrl("www.url");
-        beacon.setDatasets(Arrays.asList(this.dataset));
+        beacon.setDatasets(Arrays.asList(createSampleBeaconDataset()));
         beacon.setCreateDateTime(new Date().toString());
         beacon.setUpdateDateTime(new Date().toString());
-        beacon.setSampleAlleleRequests(Arrays.asList(request));
-        beacon.setOrganization(organization);
-        beacon.setId("1231231ssdaa");
+        beacon.setSampleAlleleRequests(Arrays.asList(createSampleRequest()));
+        beacon.setOrganization(createSampleOrganization());
+        beacon.setId(BEACON_ID);
+        Map<String, String> info = new HashMap<>();
+        info.put("note", "Sample Beacon only");
+        beacon.setInfo(info);
 
         return beacon;
     }
 
     private BeaconAlleleRequest createSampleRequest() {
         BeaconAlleleRequest request = new BeaconAlleleRequest();
-        request.setDatasetIds(Arrays.asList("123123"));
-        request.setReferenceName("chr12");
+        request.setDatasetIds(Arrays.asList(DATASET_ID));
+        request.setReferenceName("1");
         request.setAssemblyId("GRCh37");
         request.setIncludeDatasetResponses(true);
-        request.setStart(123123123l);
+        request.setStart(1000l);
         request.setReferenceBases("A");
         request.setAlternateBases("C");
-
         return request;
 
     }
 
-    private BeaconAlleleResponse createSampleResponse() {
-        BeaconAlleleResponse response = new BeaconAlleleResponse();
-        response.setAlleleRequest(request);
-        response.setBeaconId(beacon.getId());
-        response.setExists(true);
-        response.setError(null);
-        response.setDatasetAlleleResponses(Arrays.asList(datasetResponse));
-        return response;
-    }
-
-    private BeaconDatasetAlleleResponse createSampleDatasetResponse() {
-        BeaconDatasetAlleleResponse datasetResponse = new BeaconDatasetAlleleResponse();
-        datasetResponse.setDatasetId(dataset.getId());
-        datasetResponse.setExists(true);
-        datasetResponse.setCallCount(100l);
-        datasetResponse.setFrequency(0.221);
-
-        return datasetResponse;
-    }
-
     private BeaconOrganization createSampleOrganization() {
         BeaconOrganization organization = new BeaconOrganization();
+        organization.setAddress("123 Nullpointer Ave, StackTrace, Ohio");
+        organization.setContactUrl("www.google.com");
+        organization.setDescription("Sample implementation of a beacon organization");
+        organization.setWelcomeUrl("www.google.com");
+        organization.setLogoUrl("www.logoUrl.com");
         organization.setName("Sample Org");
-        organization.setId("123ad12d");
+        organization.setId(ORG_ID);
+        Map<String, String> info = new HashMap<>();
+        info.put("note", "Sample Beacon only");
+        organization.setInfo(info);
 
         return organization;
     }
@@ -147,10 +197,17 @@ public class SampleBeaconAdapterImpl extends BeaconAdapter {
     private BeaconDataset createSampleBeaconDataset() {
         BeaconDataset dataset = new BeaconDataset();
         dataset.setName("Sample Dataset");
-        dataset.setAssemblyId("GRC37");
+        dataset.setAssemblyId("GRCh37");
         dataset.setUpdateDateTime(new Date().toString());
         dataset.setCreateDateTime(new Date().toString());
-        dataset.setId("125sda211");
+        dataset.setId(DATASET_ID);
+        dataset.setVersion(API_VERSION);
+        dataset.setCallCount(10l);
+        dataset.setSampleCount(10l);
+        dataset.setDescription("Sample implementation");
+        Map<String, String> info = new HashMap<>();
+        info.put("note", "Sample Beacon only");
+        dataset.setInfo(info);
 
         return dataset;
 
