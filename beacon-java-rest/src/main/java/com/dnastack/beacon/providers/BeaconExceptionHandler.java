@@ -23,7 +23,7 @@
  */
 package com.dnastack.beacon.providers;
 
-import com.dnastack.beacon.core.service.api.BeaconService;
+import com.dnastack.beacon.service.api.BeaconService;
 import com.dnastack.beacon.exceptions.BeaconAlleleRequestException;
 import com.dnastack.beacon.exceptions.BeaconException;
 import org.ga4gh.beacon.Beacon;
