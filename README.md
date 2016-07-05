@@ -1,4 +1,4 @@
-# Java Beacon Rest
+# Java Beacon Implementation (JBDK)
 
 ## Contents
 
