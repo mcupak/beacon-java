@@ -1,4 +1,4 @@
-# Java Beacon Implementation (JBDK)
+# Java Beacon Implementation (JBDK) [![Build Status](https://travis-ci.org/mcupak/beacon-java.svg?branch=develop)](https://travis-ci.org/mcupak/beacon-java) [![GitHub license](https://img.shields.io/badge/license-mit-blue.svg)](https://raw.githubusercontent.com/mcupak/beacon-java/develop/LICENSE)
 
 ## Contents
 

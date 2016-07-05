@@ -1,0 +1,20 @@
+language: java
+sudo: false
+jdk:
+  - oraclejdk8
+branches:
+  only:
+    - master
+    - develop
+env:
+  - JBOSS_HOME=/home/travis/build/mcupak/beacon-java/wildfly-10.0.0.Final
+before_install:
+  - wget http://download.jboss.org/wildfly/10.0.0.Final/wildfly-10.0.0.Final.tar.gz
+  - tar xf wildfly-10.0.0.Final.tar.gz
+  - wget https://github.com/ga4gh/beacon-team/archive/v0.3.0.tar.gz
+  - tar xf v0.3.0.tar.gz
+  - mvn install -q -f beacon-team-*/pom.xml
+  - git clone https://github.com/mcupak/beacon-adapter-api.git
+  - mvn install -q -f beacon-adapter-api/pom.xml
+script:
+  - mvn test -f beacon-java-rest -P test-managed
