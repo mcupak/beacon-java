@@ -41,7 +41,6 @@ import java.util.List;
 @Path("/query")
 public interface BeaconQuery {
 
-
     /**
      * Query a beacon resource for information on whether an allele exists or not. Optionally includes the datasets.
      * Returns the completed BeaconAlleleResponse, Or a BeaconAlleleResponse with a BeaconError object if an error
@@ -59,13 +58,7 @@ public interface BeaconQuery {
      */
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    BeaconAlleleResponse query(@QueryParam("referenceName") String referenceName,
-                               @QueryParam("start") Long start,
-                               @QueryParam("referenceBases") String referenceBases,
-                               @QueryParam("alternateBases") String alternateBases,
-                               @QueryParam("assemblyId") String assemblyId,
-                               @QueryParam("datasetIds") List<String> datasetIds,
-                               @QueryParam("includeDatasetResponses") Boolean includeDatasetResponses) throws BeaconException;
+    BeaconAlleleResponse query(@QueryParam("referenceName") String referenceName, @QueryParam("start") Long start, @QueryParam("referenceBases") String referenceBases, @QueryParam("alternateBases") String alternateBases, @QueryParam("assemblyId") String assemblyId, @QueryParam("datasetIds") List<String> datasetIds, @QueryParam("includeDatasetResponses") Boolean includeDatasetResponses) throws BeaconException;
 
     /**
      * Query a beacon resource for information on whether an allele exists or not. Optionally includes the datasets.
@@ -80,6 +73,5 @@ public interface BeaconQuery {
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     BeaconAlleleResponse query(BeaconAlleleRequest request) throws BeaconException;
-
 
 }

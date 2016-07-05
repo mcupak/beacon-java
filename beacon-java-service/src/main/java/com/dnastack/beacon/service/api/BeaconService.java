@@ -40,7 +40,6 @@ import java.util.List;
  */
 public interface BeaconService {
 
-
     /**
      * Get a beacon allele response from a beacon allele request.
      *
@@ -64,7 +63,6 @@ public interface BeaconService {
      * @throws BeaconAlleleRequestException
      */
     BeaconAlleleResponse queryAllele(BeaconAlleleRequest request) throws BeaconException;
-
 
     /**
      * Get information for a single beacon.

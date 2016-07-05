@@ -21,7 +21,6 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-
 package com.dnastack.beacon.core.adapter.impl;
 
 import com.dnastack.beacon.adapter.api.BeaconAdapter;
@@ -29,14 +28,14 @@ import com.dnastack.beacon.exceptions.BeaconException;
 import org.ga4gh.beacon.*;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateless;
+import javax.enterprise.context.Dependent;
 import java.util.*;
 
 /**
  * Created by patrickmagee on 2016-06-17.
  */
-@Stateless
-public class SampleBeaconAdapterImpl extends BeaconAdapter {
+@Dependent
+public class SampleBeaconAdapterImpl implements BeaconAdapter {
 
     public static final String API_VERSION = "0.3.0";
     public static final String BEACON_ID = "beacon_id";
@@ -44,41 +43,6 @@ public class SampleBeaconAdapterImpl extends BeaconAdapter {
     public static final String ORG_ID = "org_id";
 
     private SampleDataStore dataStore;
-
-    @Override
-    @PostConstruct
-    public void init() {
-        dataStore = new SampleDataStore();
-    }
-
-    @Override
-    public BeaconAlleleResponse getAlleleResponse(BeaconAlleleRequest request) throws BeaconException {
-
-        BeaconAlleleResponse response = new BeaconAlleleResponse();
-        response.setBeaconId(BEACON_ID);
-        response.setAlleleRequest(request);
-
-        List<BeaconDatasetAlleleResponse> responses = new ArrayList<>();
-        for (String datasetId : request.getDatasetIds()) {
-            responses.add(lookupDataset(datasetId, request.getAssemblyId(), request.getReferenceName(), request.getStart(), request
-                    .getReferenceBases(), request.getAlternateBases()));
-        }
-
-        if (!request.getIncludeDatasetResponses() && responses.size() == 1 && responses.get(0).getError() != null) {
-            response.setExists(null);
-            response.setError(responses.get(0).getError());
-        } else if (request.getIncludeDatasetResponses()) {
-            response.setDatasetAlleleResponses(responses);
-        }
-        boolean exists = false;
-        for (BeaconDatasetAlleleResponse datasetResponses : responses) {
-            if (datasetResponses.getExists() == true) {
-                exists = true;
-            }
-        }
-        response.setExists(exists);
-        return response;
-    }
 
     private BeaconDatasetAlleleResponse lookupDataset(String datasetId, String assemblyId, String referencName, long start, String refBases, String altBases) {
         BeaconDatasetAlleleResponse response = new BeaconDatasetAlleleResponse();
@@ -136,12 +100,6 @@ public class SampleBeaconAdapterImpl extends BeaconAdapter {
         info.put("note", "Sample Beacon only");
         datasetResponse.setInfo(info);
         return datasetResponse;
-    }
-
-
-    @Override
-    public Beacon getBeaconResponse() throws BeaconException {
-        return createSampleBeacon();
     }
 
     private Beacon createSampleBeacon() {
@@ -213,5 +171,47 @@ public class SampleBeaconAdapterImpl extends BeaconAdapter {
 
     }
 
+    @PostConstruct
+    public void init() {
+        dataStore = new SampleDataStore();
+    }
+
+    @Override
+    public BeaconAlleleResponse getBeaconAlleleResponse(BeaconAlleleRequest request) throws BeaconException {
+
+        BeaconAlleleResponse response = new BeaconAlleleResponse();
+        response.setBeaconId(BEACON_ID);
+        response.setAlleleRequest(request);
+
+        List<BeaconDatasetAlleleResponse> responses = new ArrayList<>();
+        for (String datasetId : request.getDatasetIds()) {
+            responses.add(lookupDataset(datasetId,
+                                        request.getAssemblyId(),
+                                        request.getReferenceName(),
+                                        request.getStart(),
+                                        request.getReferenceBases(),
+                                        request.getAlternateBases()));
+        }
+
+        if (!request.getIncludeDatasetResponses() && responses.size() == 1 && responses.get(0).getError() != null) {
+            response.setExists(null);
+            response.setError(responses.get(0).getError());
+        } else if (request.getIncludeDatasetResponses()) {
+            response.setDatasetAlleleResponses(responses);
+        }
+        boolean exists = false;
+        for (BeaconDatasetAlleleResponse datasetResponses : responses) {
+            if (datasetResponses.getExists() == true) {
+                exists = true;
+            }
+        }
+        response.setExists(exists);
+        return response;
+    }
+
+    @Override
+    public Beacon getBeacon() throws BeaconException {
+        return createSampleBeacon();
+    }
 
 }

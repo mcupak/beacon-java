@@ -23,7 +23,6 @@
  */
 package com.dnastack.beacon.providers;
 
-
 import com.dnastack.beacon.util.ResponseMappingResource;
 import org.ga4gh.beacon.BeaconError;
 import org.json.simple.JSONObject;
@@ -38,7 +37,6 @@ import javax.ws.rs.ext.Provider;
  *
  * @author patmagee
  */
-
 @Provider
 public class DefaultExceptionHandler implements ExceptionMapper<Exception> {
 

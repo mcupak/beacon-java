@@ -23,9 +23,9 @@
  */
 package com.dnastack.beacon.providers;
 
-import com.dnastack.beacon.service.api.BeaconService;
 import com.dnastack.beacon.exceptions.BeaconAlleleRequestException;
 import com.dnastack.beacon.exceptions.BeaconException;
+import com.dnastack.beacon.service.api.BeaconService;
 import org.ga4gh.beacon.Beacon;
 import org.ga4gh.beacon.BeaconAlleleResponse;
 import org.ga4gh.beacon.BeaconError;
@@ -60,7 +60,7 @@ public class BeaconExceptionHandler implements ExceptionMapper<BeaconException> 
         }
 
         //If this is an alleleRequest then return a BeaconAlleleResponse with the error fields set appropriately
-        if (exception.getClass().getCanonicalName().equals(BeaconAlleleRequestException.class.getCanonicalName())){
+        if (exception.getClass().getCanonicalName().equals(BeaconAlleleRequestException.class.getCanonicalName())) {
             BeaconAlleleRequestException e = (BeaconAlleleRequestException) exception;
             BeaconAlleleResponse response = new BeaconAlleleResponse();
             response.setExists(null);

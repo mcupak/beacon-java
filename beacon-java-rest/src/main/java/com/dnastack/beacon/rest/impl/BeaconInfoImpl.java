@@ -23,9 +23,9 @@
  */
 package com.dnastack.beacon.rest.impl;
 
-import com.dnastack.beacon.service.api.BeaconService;
 import com.dnastack.beacon.exceptions.BeaconException;
 import com.dnastack.beacon.rest.api.BeaconInfo;
+import com.dnastack.beacon.service.api.BeaconService;
 import org.ga4gh.beacon.Beacon;
 
 import javax.inject.Inject;

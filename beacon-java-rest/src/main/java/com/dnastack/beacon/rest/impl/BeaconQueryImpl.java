@@ -23,9 +23,9 @@
  */
 package com.dnastack.beacon.rest.impl;
 
-import com.dnastack.beacon.service.api.BeaconService;
 import com.dnastack.beacon.exceptions.BeaconException;
 import com.dnastack.beacon.rest.api.BeaconQuery;
+import com.dnastack.beacon.service.api.BeaconService;
 import org.ga4gh.beacon.BeaconAlleleRequest;
 import org.ga4gh.beacon.BeaconAlleleResponse;
 
@@ -47,7 +47,13 @@ public class BeaconQueryImpl implements BeaconQuery {
      */
     @Override
     public BeaconAlleleResponse query(String referenceName, Long start, String referenceBases, String alternateBases, String assemblyId, List<String> datasetIds, Boolean includeDatasetResponses) throws BeaconException {
-        return service.queryAllele(referenceName, start, referenceBases, alternateBases, assemblyId, datasetIds, includeDatasetResponses);
+        return service.queryAllele(referenceName,
+                                   start,
+                                   referenceBases,
+                                   alternateBases,
+                                   assemblyId,
+                                   datasetIds,
+                                   includeDatasetResponses);
     }
 
     /**

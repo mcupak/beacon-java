@@ -24,11 +24,6 @@
 
 package com.dnastack.beacon.core.adapter.impl;
 
-import com.dnastack.beacon.exceptions.BeaconAlleleRequestException;
-import com.dnastack.beacon.exceptions.BeaconException;
-import org.ga4gh.beacon.BeaconAlleleRequest;
-import org.ga4gh.beacon.BeaconError;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,7 +34,6 @@ import java.util.Map;
  */
 public class SampleDataStore {
 
-
     private final Map<String, Map> DATA;
 
     public SampleDataStore() {
@@ -48,23 +42,17 @@ public class SampleDataStore {
         Map<String, Map> references = new HashMap<>();
         Map<Long, Map> positions = new HashMap<>();
         Map<String, String> bases = new HashMap<>();
-        bases.put("referenceBases","A");
-        bases.put("alternateBases","C");
-        positions.put(1000l,bases);
-        references.put("1",positions);
+        bases.put("referenceBases", "A");
+        bases.put("alternateBases", "C");
+        positions.put(1000l, bases);
+        references.put("1", positions);
         assemblies.put("GRCh37", references);
         DATA.put(SampleBeaconAdapterImpl.DATASET_ID, assemblies);
 
     }
 
-
-    public Map<String, Map> getDATA(){
+    public Map<String, Map> getDATA() {
         return DATA;
     }
-
-
-
-
-
 
 }

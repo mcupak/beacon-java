@@ -49,7 +49,6 @@ import java.lang.reflect.Type;
 @Consumes(MediaType.APPLICATION_JSON)
 public class GsonMessageBodyHandler implements MessageBodyReader<Object>, MessageBodyWriter<Object> {
 
-
     private static final String UTF_8 = "UTF-8";
 
     private Gson gson;

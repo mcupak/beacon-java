@@ -23,17 +23,16 @@
  */
 package com.dnastack.beacon.service.impl;
 
-
 import com.dnastack.beacon.adapter.api.BeaconAdapter;
-import com.dnastack.beacon.service.api.BeaconService;
 import com.dnastack.beacon.exceptions.BeaconAlleleRequestException;
 import com.dnastack.beacon.exceptions.BeaconException;
+import com.dnastack.beacon.service.api.BeaconService;
 import com.dnastack.beacon.utils.Reason;
 import org.ga4gh.beacon.Beacon;
 import org.ga4gh.beacon.BeaconAlleleRequest;
 import org.ga4gh.beacon.BeaconAlleleResponse;
 
-import javax.ejb.Stateless;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.util.List;
 
@@ -42,11 +41,41 @@ import java.util.List;
  *
  * @author patrickmagee
  */
-@Stateless
+@RequestScoped
 public class BeaconServiceImpl implements BeaconService {
 
     @Inject
     private BeaconAdapter adapter;
+
+    /**
+     * Validate the beacon fields according to the 0.3.0 beacon specifications
+     *
+     * @param referenceName
+     * @param start
+     * @param referenceBases
+     * @param alternateBases
+     * @param assemblyId
+     * @throws BeaconAlleleRequestException
+     */
+    private void validateRequest(String referenceName, Long start, String referenceBases, String alternateBases, String assemblyId) throws BeaconAlleleRequestException {
+        if (referenceName == null) {
+            throw new BeaconAlleleRequestException(Reason.INVALID_REQUEST,
+                                                   "Reference cannot be null. Please provide an appropriate reference name");
+        } else if (start == null) {
+            throw new BeaconAlleleRequestException(Reason.INVALID_REQUEST,
+                                                   "Start position cannot be null. Please provide a 0-based start position");
+        } else if (referenceBases == null) {
+            throw new BeaconAlleleRequestException(Reason.INVALID_REQUEST, "Reference bases cannot be null");
+        } else if (alternateBases == null) {
+            throw new BeaconAlleleRequestException(Reason.INVALID_REQUEST, "Alternate bases cannot be null");
+        } else if (assemblyId == null) {
+            throw new BeaconAlleleRequestException(Reason.INVALID_REQUEST,
+                                                   "AssemblyId cannot be null. Please defined a valid GRCh assembly Id");
+        } else if (!assemblyId.startsWith("GRCh")) {
+            throw new BeaconAlleleRequestException(Reason.INVALID_REQUEST,
+                                                   "Invalid assemblyId. Assemblies must be from GRCh builds");
+        }
+    }
 
     /**
      * @inheritDoc
@@ -69,7 +98,7 @@ public class BeaconServiceImpl implements BeaconService {
         request.setAssemblyId(assemblyId);
         request.setDatasetIds(datasetIds);
 
-        return adapter.getAlleleResponse(request);
+        return adapter.getBeaconAlleleResponse(request);
     }
 
     /**
@@ -77,14 +106,17 @@ public class BeaconServiceImpl implements BeaconService {
      **/
     @Override
     public BeaconAlleleResponse queryAllele(BeaconAlleleRequest request) throws BeaconException {
-        validateRequest(request.getReferenceName(), request.getStart(), request.getReferenceBases(), request.getAlternateBases(), request
-                .getAssemblyId());
+        validateRequest(request.getReferenceName(),
+                        request.getStart(),
+                        request.getReferenceBases(),
+                        request.getAlternateBases(),
+                        request.getAssemblyId());
 
         if (request.getIncludeDatasetResponses() == null) {
             request.setIncludeDatasetResponses(false);
         }
 
-        return adapter.getAlleleResponse(request);
+        return adapter.getBeaconAlleleResponse(request);
     }
 
     /**
@@ -92,32 +124,6 @@ public class BeaconServiceImpl implements BeaconService {
      **/
     @Override
     public Beacon queryBeacon() throws BeaconException {
-        return adapter.getBeaconResponse();
-    }
-
-    /**
-     * Validate the beacon fields according to the 0.3.0 beacon specifications
-     *
-     * @param referenceName
-     * @param start
-     * @param referenceBases
-     * @param alternateBases
-     * @param assemblyId
-     * @throws BeaconAlleleRequestException
-     */
-    private void validateRequest(String referenceName, Long start, String referenceBases, String alternateBases, String assemblyId) throws BeaconAlleleRequestException {
-        if (referenceName == null) {
-            throw new BeaconAlleleRequestException(Reason.INVALID_REQUEST, "Reference cannot be null. Please provide an appropriate reference name");
-        } else if (start == null) {
-            throw new BeaconAlleleRequestException(Reason.INVALID_REQUEST, "Start position cannot be null. Please provide a 0-based start position");
-        } else if (referenceBases == null) {
-            throw new BeaconAlleleRequestException(Reason.INVALID_REQUEST, "Reference bases cannot be null");
-        } else if (alternateBases == null) {
-            throw new BeaconAlleleRequestException(Reason.INVALID_REQUEST, "Alternate bases cannot be null");
-        } else if (assemblyId == null) {
-            throw new BeaconAlleleRequestException(Reason.INVALID_REQUEST, "AssemblyId cannot be null. Please defined a valid GRCh assembly Id");
-        } else if (!assemblyId.startsWith("GRCh")) {
-            throw new BeaconAlleleRequestException(Reason.INVALID_REQUEST, "Invalid assemblyId. Assemblies must be from GRCh builds");
-        }
+        return adapter.getBeacon();
     }
 }
