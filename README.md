@@ -45,8 +45,35 @@ The project provides the following:
 - sample testsuite
 
 
-## More Information
-- For guidelines on implementing the beacon-rest service see [here](/beacon-java-rest)
+##How to run it
+Start the JBoss server:
+
+    For Linux/Unix: JBOSS_HOME/bin/standalone.sh
+    For Windows: 	JBOSS_HOME\bin\standalone.bat
+
+Build and deploy the archive:
+
+    mvn clean install jboss-as:deploy
+
+The application should now be running on <http://localhost:8080/beacon-java>.
+
+In order to run the tests in a managed (remote) container, use the test-managed (test-remote) Maven profile. Example:
+
+    mvn clean test -Ptest-managed
+
+##Creating a beacon
+The beacon implementation is designed to use a beacon-adapter provided through the [beacon-adapter-api project](https://github.com/mcupak/beacon-adapter-api) project. The user can either extend the abstract BeaconAdapter class to create a custom implementation, or they can use one of the beacon-adapter implementations that are provided
+
+Once you have created your own adapter, simply replace the adapter dependency in the beacon-java-rest's pom with your own. The sample beacon adapter is intended to be a placeholder to allow the tests to be run, and to give the user an idea of how to implement a beacon. After this has been completely they are free to implement their own adapter.
+
+- Add your desired beacon adapter to the pom.xml in the commented out section
+- Deploy The beacon
+- Run the test-managed profile to ensure the beacon works and complies with the beacon spec
+
+The API takes care of the rest and provides the following endpoints upon deployment of your beacon:
+
+    http://localhost:8080/beacon-java/ - information about your beacon
+    http://localhost:8080/beacon-java/query - access to query service
 
 
 ##Technologies
