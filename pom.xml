@@ -11,7 +11,7 @@
     <name>beacon-java</name>
 
     <modules>
-        <module>beacon-java-core</module>
+        <module>beacon-java-service</module>
         <module>sample-beacon-adapter</module>
         <module>beacon-java-rest</module>
     </modules>

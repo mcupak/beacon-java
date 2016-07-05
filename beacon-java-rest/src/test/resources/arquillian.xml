@@ -8,9 +8,6 @@
     </engine>
 
     <container qualifier="jbossas-managed" default="true">
-        <configuration>
-            <property name="jbossHome">/Users/patrickmagee/wildfly</property>
-        </configuration>
 
         <!--        <configuration>
             <property name="jbossHome">target/jboss-as-7.2.0.Final</property>
@@ -19,5 +16,4 @@
                         </property> 
         </configuration>-->
     </container>
-
 </arquillian>

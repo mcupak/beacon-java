@@ -116,7 +116,7 @@ public class BeaconServiceImpl implements BeaconService {
             throw new BeaconAlleleRequestException(Reason.INVALID_REQUEST, "Alternate bases cannot be null");
         } else if (assemblyId == null) {
             throw new BeaconAlleleRequestException(Reason.INVALID_REQUEST, "AssemblyId cannot be null. Please defined a valid GRCh assembly Id");
-        } else if (assemblyId.startsWith("GRCh")) {
+        } else if (!assemblyId.startsWith("GRCh")) {
             throw new BeaconAlleleRequestException(Reason.INVALID_REQUEST, "Invalid assemblyId. Assemblies must be from GRCh builds");
         }
     }
