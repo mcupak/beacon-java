@@ -30,9 +30,14 @@ import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.ga4gh.beacon.BeaconAlleleRequest;
 import org.ga4gh.beacon.BeaconAlleleResponse;
+import org.keycloak.AuthorizationContext;
+import org.keycloak.KeycloakSecurityContext;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Path;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Request;
 import java.util.List;
 
 /**
@@ -47,8 +52,12 @@ public class BeaconQueryImpl implements BeaconQuery {
 
     @Override
     public BeaconAlleleResponse query(String referenceName, Long start, String referenceBases, String alternateBases,
-                                      String assemblyId, List<String> datasetIds, Boolean includeDatasetResponses)
+                                      String assemblyId, List<String> datasetIds, Boolean includeDatasetResponses, @Context HttpServletRequest servletRequest)
             throws InvalidAlleleRequestException {
+
+        KeycloakSecurityContext keycloakSecurityContext = (KeycloakSecurityContext) servletRequest.getAttribute(KeycloakSecurityContext.class.getName());
+        AuthorizationContext authzContext = keycloakSecurityContext.getAuthorizationContext();
+
         validateRequest(referenceName, start, referenceBases, alternateBases, assemblyId);
         BeaconAlleleRequest request = BeaconAlleleRequest.newBuilder()
                 .setReferenceName(referenceName)

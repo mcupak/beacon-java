@@ -25,6 +25,8 @@ package com.dnastack.beacon.rest.sys;
 
 import org.ga4gh.beacon.BeaconError;
 
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
@@ -53,6 +55,6 @@ public class DefaultExceptionHandler implements ExceptionMapper<Throwable> {
                 .setErrorCode(INTERNAL_SERVER_ERROR.getStatusCode())
                 .build();
 
-        return Response.status(response.getErrorCode()).entity(response).build();
+        return Response.status(response.getErrorCode()).type(MediaType.APPLICATION_JSON).entity(response).build();
     }
 }

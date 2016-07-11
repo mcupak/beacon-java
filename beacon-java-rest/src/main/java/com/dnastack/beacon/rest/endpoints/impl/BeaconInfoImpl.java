@@ -27,6 +27,8 @@ import com.dnastack.beacon.core.service.BeaconService;
 import com.dnastack.beacon.rest.endpoints.BeaconInfo;
 import com.dnastack.beacon.rest.exceptions.BeaconException;
 import org.ga4gh.beacon.Beacon;
+import org.keycloak.AuthorizationContext;
+import org.keycloak.KeycloakSecurityContext;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;

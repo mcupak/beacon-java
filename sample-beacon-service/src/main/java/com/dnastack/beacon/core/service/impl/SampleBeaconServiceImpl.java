@@ -24,11 +24,13 @@
 package com.dnastack.beacon.core.service.impl;
 
 import com.dnastack.beacon.core.service.BeaconService;
+import com.dnastack.beacon.core.service.test.MyInterface;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.ga4gh.beacon.*;
 
 import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -43,8 +45,12 @@ import static javax.ws.rs.core.Response.Status;
 @Dependent
 public class SampleBeaconServiceImpl implements BeaconService {
 
+    @Inject
+    private MyInterface myInterface;
+
     @Override
     public Beacon getBeacon() {
+        myInterface.hello();
         return SampleData.BEACON;
     }
 

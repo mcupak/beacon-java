@@ -46,11 +46,11 @@ public class SampleData {
 
     static {
         BeaconDataset dataset = BeaconDataset.newBuilder()
+                .setId("sample_dataset_id_1")
                 .setName("Sample Dataset")
                 .setAssemblyId("GRCh37")
                 .setUpdateDateTime(new Date().toString())
                 .setCreateDateTime(new Date().toString())
-                .setId("sample_dataset_id")
                 .setVersion("0.3.0")
                 .setCallCount(10L)
                 .setSampleCount(10L)
