@@ -9,13 +9,11 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-
-    <groupId>com.dnastack</groupId>
     <artifactId>beacon-java-rest</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>beacon-java-rest</name>
+    <name>Beacon Java Rest</name>
 
     <developers>
         <developer>
@@ -108,23 +106,14 @@
             <artifactId>rest-assured</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.dnastack</groupId>
-            <artifactId>beacon-java-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.dnastack</groupId>
-            <artifactId>beacon-adapter-api</artifactId>
-        </dependency>
 
-        <!-- Sample Beacon Adapter -->
+        <!-- Sample Beacon Service -->
         <dependency>
             <groupId>com.dnastack</groupId>
-            <artifactId>sample-beacon-adapter</artifactId>
+            <artifactId>sample-beacon-service</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <!-- End your sample beacon adapter -->
+        <!-- End your sample beacon service -->
 
     </dependencies>
 
@@ -160,15 +149,11 @@
             <build>
                 <plugins>
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
-                        <version>${version.surefire.plugin}</version>
                         <configuration>
                             <skip>true</skip>
                         </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.wildfly.plugins</groupId>
-                        <artifactId>wildfly-maven-plugin</artifactId>
                     </plugin>
                 </plugins>
             </build>
@@ -181,17 +166,36 @@
                     <artifactId>wildfly-arquillian-container-managed</artifactId>
                     <scope>test</scope>
                 </dependency>
-                <dependency>
-                    <groupId>org.jboss.arquillian.protocol</groupId>
-                    <artifactId>arquillian-protocol-servlet</artifactId>
-                    <scope>test</scope>
-                </dependency>
             </dependencies>
             <build>
                 <plugins>
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>unpack</id>
+                                <phase>process-test-classes</phase>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>org.wildfly</groupId>
+                                            <artifactId>wildfly-dist</artifactId>
+                                            <version>${version.org.wildfly}</version>
+                                            <type>zip</type>
+                                            <overWrite>false</overWrite>
+                                            <outputDirectory>${project.build.directory}</outputDirectory>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
                         <artifactId>maven-surefire-plugin</artifactId>
-                        <version>${version.surefire.plugin}</version>
                         <configuration>
                             <skip>false</skip>
                             <includes>
@@ -220,7 +224,6 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-surefire-plugin</artifactId>
-                        <version>${version.surefire.plugin}</version>
                         <configuration>
                             <skip>false</skip>
                             <includes>

@@ -11,7 +11,6 @@
     <name>beacon-java</name>
 
     <modules>
-        <module>beacon-java-service</module>
         <module>sample-beacon-adapter</module>
         <module>beacon-java-rest</module>
     </modules>
@@ -65,6 +64,7 @@
         <version.json.simple>1.1.1</version.json.simple>
         <version.assertj>3.4.1</version.assertj>
         <version.beacon.adapter.api>1.0-SNAPSHOT</version.beacon.adapter.api>
+        <version.org.wildfly>8.2.1.Final</version.org.wildfly>
     </properties>
 
     <dependencyManagement>
@@ -110,7 +110,7 @@
             <dependency>
                 <groupId>org.assertj</groupId>
                 <artifactId>assertj-core</artifactId>
-                <version>3.4.1</version>
+                <version>${version.assertj}</version>
             </dependency>
             <dependency>
                 <groupId>org.ga4gh</groupId>
@@ -120,7 +120,7 @@
             <dependency>
                 <groupId>com.googlecode.json-simple</groupId>
                 <artifactId>json-simple</artifactId>
-                <version>1.1.1</version>
+                <version>${version.json.simple}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.code.gson</groupId>
@@ -134,9 +134,16 @@
                 <version>${version.restassured}</version>
             </dependency>
             <dependency>
-                <groupId>com.dnastack</groupId>
-                <artifactId>beacon-adapter-api</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <groupId>org.wildfly</groupId>
+                <artifactId>wildfly-arquillian-container-managed</artifactId>
+                <version>${version.org.wildfly}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wildfly</groupId>
+                <artifactId>wildfly-arquillian-container-remote</artifactId>
+                <version>${version.org.wildfly}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -157,6 +164,11 @@
                     <groupId>org.wildfly.plugins</groupId>
                     <artifactId>wildfly-maven-plugin</artifactId>
                     <version>${version.wildfly.maven.plugin}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${version.surefire.plugin}</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>

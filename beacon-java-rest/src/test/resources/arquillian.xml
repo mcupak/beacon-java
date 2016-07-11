@@ -7,13 +7,15 @@
         <property name="deploymentExportPath">target/</property>
     </engine>
 
-    <container qualifier="jbossas-managed" default="true">
+    <container qualifier="widlfly-managed" default="true">
+        <configuration>
+            <property name="jbossHome">target/wildfly-8.2.1.Final</property>
+            <!--<property name="javaVmArguments">-Xmx512m -XX:MaxPermSize=128m
+                -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=y
+            </property>-->
+            <property name="javaVmArguments">-Xnoagent -Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n</property>
+            <property name="allowConnectingToRunningServer">true</property>
+        </configuration>
 
-        <!--        <configuration>
-            <property name="jbossHome">target/jboss-as-7.2.0.Final</property>
-                        <property name="javaVmArguments">-Xmx512m -XX:MaxPermSize=128m 
-                        -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=y 
-                        </property> 
-        </configuration>-->
     </container>
 </arquillian>
