@@ -35,7 +35,7 @@
     </parent>
 
     <artifactId>sample-beacon-service</artifactId>
-    <name>Sample Beacon Adapter</name>
+    <name>Sample Beacon Service</name>
 
     <dependencies>
         <dependency>
