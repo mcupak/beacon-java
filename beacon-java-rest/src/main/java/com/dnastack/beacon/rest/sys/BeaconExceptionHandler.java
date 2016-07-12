@@ -13,6 +13,8 @@ import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 
 /**
+ * Captures all Beacon exceptions and creates corresponding responses.
+ *
  * @author patmagee
  * @author Artem (tema.voskoboynick@gmail.com)
  * @version 1.0
@@ -20,12 +22,6 @@ import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 @Provider
 public class BeaconExceptionHandler implements ExceptionMapper<BeaconException> {
 
-    /**
-     * Default error handler to capture all errors and send the user a JSON response
-     * with the status code, reason, message and stacktrace of the error
-     *
-     * @return response with the status and error entity
-     */
     @Override
     public Response toResponse(BeaconException exception) {
         if (exception instanceof InvalidAlleleRequestException) {
@@ -35,6 +31,10 @@ public class BeaconExceptionHandler implements ExceptionMapper<BeaconException> 
         }
     }
 
+    /**
+     * Due to backward compatibility issues, the response on Beacon Query request should always be of the {@link BeaconAlleleResponse} type,
+     * and any errors, if any, are stored inside it.
+     */
     private Response handleInvalidAlleleRequestException(InvalidAlleleRequestException exception) {
         BeaconAlleleResponse response = new BeaconAlleleResponse();
         response.setAlleleRequest(exception.getRequest());

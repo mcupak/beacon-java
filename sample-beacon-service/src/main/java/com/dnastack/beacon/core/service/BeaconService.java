@@ -5,6 +5,8 @@ import org.ga4gh.beacon.BeaconAlleleRequest;
 import org.ga4gh.beacon.BeaconAlleleResponse;
 
 /**
+ * Implement this service accordingly to your Beacon.
+ *
  * @author Artem (tema.voskoboynick@gmail.com)
  * @version 1.0
  */

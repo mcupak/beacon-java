@@ -25,7 +25,6 @@ package com.dnastack.beacon.rest.sys;
 
 import org.ga4gh.beacon.BeaconError;
 
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -34,7 +33,7 @@ import javax.ws.rs.ext.Provider;
 import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 
 /**
- * Default Exception handler to catch all Non Beacon exceptions thrown by the rest resources.
+ * Catches all non Beacon exceptions thrown by the rest resources.
  *
  * @author patmagee
  * @author Artem (tema.voskoboynick@gmail.com)
@@ -42,12 +41,6 @@ import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 @Provider
 public class DefaultExceptionHandler implements ExceptionMapper<Throwable> {
 
-    /**
-     * Default error handler to capture all errors and send the user a JSON response
-     * with the status code, reason, message and stacktrace of the error
-     *
-     * @return response with the status and error entity
-     */
     @Override
     public Response toResponse(Throwable exception) {
         BeaconError response = BeaconError.newBuilder()

@@ -27,13 +27,10 @@ package com.dnastack.beacon.core.service.impl;
 import avro.shaded.com.google.common.collect.ImmutableMap;
 import org.ga4gh.beacon.*;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
- * This class simply is acting as a datastorage for the BeaconAdapter to perform lookups on
+ * Sample data holder.
  *
  * @author patmagee
  * @author Artem (tema.voskoboynick@gmail.com)
@@ -58,6 +55,12 @@ public class SampleData {
                 .setInfo(ImmutableMap.of("note", "This is a Sample Dataset"))
                 .build();
 
+        BeaconDataset dataset2 = BeaconDataset.newBuilder(dataset)
+                .setId("sample_dataset_id_2")
+                .setName("Second Sample Dataset")
+                .build();
+
+
         BASE_DATASET_RESPONSE = BeaconDatasetAlleleResponse.newBuilder()
                 .setCallCount(1L)
                 .setFrequency(0.221)
@@ -69,8 +72,8 @@ public class SampleData {
                 .setExists(null) // Setting nulls explicitly required by avro.
                 .build();
 
-        BeaconAlleleRequest request = BeaconAlleleRequest.newBuilder()
-                .setDatasetIds(Collections.singletonList(dataset.getId()))
+        BeaconAlleleRequest sampleRequest = BeaconAlleleRequest.newBuilder()
+                .setDatasetIds(Arrays.asList(dataset.getId(), dataset2.getId()))
                 .setReferenceName("1")
                 .setAssemblyId("GRCh37")
                 .setIncludeDatasetResponses(true)
@@ -82,14 +85,15 @@ public class SampleData {
         DATASETS = new HashMap<String, Map>() {
             {
                 Map<String, String> bases = ImmutableMap.of(
-                        "referenceBases", request.getReferenceBases(),
-                        "alternateBases", request.getAlternateBases()
+                        "referenceBases", sampleRequest.getReferenceBases(),
+                        "alternateBases", sampleRequest.getAlternateBases()
                 );
-                Map<Long, Map> positions = ImmutableMap.of(request.getStart(), bases);
-                Map<String, Map> references = ImmutableMap.of(request.getReferenceName(), positions);
-                Map<String, Map> assemblies = ImmutableMap.of(request.getAssemblyId(), references);
+                Map<Long, Map> positions = ImmutableMap.of(sampleRequest.getStart(), bases);
+                Map<String, Map> references = ImmutableMap.of(sampleRequest.getReferenceName(), positions);
+                Map<String, Map> assemblies = ImmutableMap.of(sampleRequest.getAssemblyId(), references);
 
                 put(dataset.getId(), assemblies);
+                put(dataset2.getId(), assemblies);
             }
         };
 
@@ -114,7 +118,7 @@ public class SampleData {
                 .setDatasets(Collections.singletonList(dataset))
                 .setCreateDateTime(new Date().toString())
                 .setUpdateDateTime(new Date().toString())
-                .setSampleAlleleRequests(Collections.singletonList(request))
+                .setSampleAlleleRequests(Collections.singletonList(sampleRequest))
                 .setOrganization(organization)
                 .setId("sample_beacon_id")
                 .setInfo(ImmutableMap.of("note", "This is a sample Beacon"))

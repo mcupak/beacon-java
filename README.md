@@ -11,7 +11,7 @@
 
 ##What it is
 This project contains the BDK (beacon development kit) for Java (EE) developers. The BDK provides all of the tools required to create a basic rest implementation for a beacon almost straight out of the box with only minimal set up required.
-Users can extend the BDK to make it fit within their own project, or use it as is defining their own adapter to retrieve data from their preferred data source.
+Users can extend the BDK to make it fit within their own project, or use it as is defining their own service to retrieve data from their preferred data source.
 
 ##System requirements
 All you need to build this project is Java 8.0 (Java SDK 1.8) or later, Maven 3.0 or later. Since the project is Java EE based, an application server with support for Java EE 7 is needed to deploy the application (e.g. JBoss EAP or WildFly).
@@ -38,10 +38,8 @@ mvn clean install
 ## How it Works
 The project provides the following:
 
-- API for beacons
-- sample beacon implementation
-- conversion of parameters to a normalized form (the same way Beacon of Beacons does)
-- sample navigation webpage
+- Rest API
+- sample beacon service implementation
 - sample test suite
 
 ##How to run it
@@ -64,15 +62,13 @@ In order to run the tests from beacon-java-rest in a managed (remote) container,
     mvn test -Ptest-managed
 
 ##Creating a beacon
-The beacon implementation is designed to use a beacon-adapter provided through the [beacon-adapter-api project](https://github.com/mcupak/beacon-adapter-api) project. The user can either extend the abstract BeaconAdapter class to create a custom implementation, or they can use one of the beacon-adapter implementations that are provided
+Beacon REST API uses Beacon Service to retrieve the beacon data. The BDK ships with a sample Beacon Service that uses sample data.
+The sample Beacon Service is intended to be a placeholder to allow the tests to be run, and to give the user an idea of how to implement a beacon.
 
-Once you have created your own adapter, simply replace the adapter dependency in the beacon-java-rest's pom with your own. The sample beacon adapter is intended to be a placeholder to allow the tests to be run, and to give the user an idea of how to implement a beacon. After this has been completely they are free to implement their own adapter.
+Once you are ready, implement your own [beacon-service](https://github.com/mcupak/beacon-service) project to use query own data.
+To switch to your own Beacon Service, simply replace the service dependency in the beacon-java-rest's pom with your own.
 
-- Add your desired beacon adapter to the pom.xml in the commented out section
-- Deploy The beacon
-- Run the test-managed profile to ensure the beacon works and complies with the beacon spec
-
-The API takes care of the rest and provides the following endpoints upon deployment of your beacon:
+The Rest API provides the following endpoints upon deployment of your beacon:
 
     http://localhost:8080/beacon-java - information about your beacon
     http://localhost:8080/beacon-java/query - access to query service

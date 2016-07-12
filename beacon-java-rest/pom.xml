@@ -109,17 +109,15 @@
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-servlet-filter-adapter</artifactId>
-            <version>2.0.0.Final</version>
         </dependency>
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-authz-client</artifactId>
-            <version>2.0.0.Final</version>
         </dependency>
         <dependency>
+            <!--Required by Keycloak-->
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.5.2</version>
         </dependency>
 
         <!-- Sample Beacon Service -->

@@ -17,14 +17,21 @@
         </session-timeout>
     </session-config>
 
+    <!-- Uncomment to enable Keycloak security. -->
+    <!--
+    <context-param>
+        <param-name>keycloak.security.enabled</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    -->
+
     <filter>
         <filter-name>Keycloak Filter</filter-name>
-        <filter-class>org.keycloak.adapters.servlet.KeycloakOIDCFilter</filter-class>
+        <filter-class>com.dnastack.beacon.rest.sys.security.ConfigurableKeycloakOIDCFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>Keycloak Filter</filter-name>
         <url-pattern>/keycloak/*</url-pattern>
-        <url-pattern>/protected/*</url-pattern>
         <url-pattern>/query/*</url-pattern>
     </filter-mapping>
 </web-app>

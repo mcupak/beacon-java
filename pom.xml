@@ -65,6 +65,8 @@
         <version.assertj>3.4.1</version.assertj>
         <version.beacon.adapter.api>1.0-SNAPSHOT</version.beacon.adapter.api>
         <version.org.wildfly>8.2.1.Final</version.org.wildfly>
+        <version.keycloak>2.0.0.Final</version.keycloak>
+        <version.httpcomponents>4.5.2</version.httpcomponents>
     </properties>
 
     <dependencyManagement>
@@ -144,6 +146,21 @@
                 <artifactId>wildfly-arquillian-container-remote</artifactId>
                 <version>${version.org.wildfly}</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.keycloak</groupId>
+                <artifactId>keycloak-servlet-filter-adapter</artifactId>
+                <version>${version.keycloak}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.keycloak</groupId>
+                <artifactId>keycloak-authz-client</artifactId>
+                <version>${version.keycloak}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${version.httpcomponents}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

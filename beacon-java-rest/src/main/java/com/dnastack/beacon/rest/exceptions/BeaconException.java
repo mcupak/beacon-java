@@ -1,6 +1,8 @@
 package com.dnastack.beacon.rest.exceptions;
 
 /**
+ * Base class for all checked Beacon exceptions.
+ *
  * @author Artem (tema.voskoboynick@gmail.com)
  * @version 1.0
  */

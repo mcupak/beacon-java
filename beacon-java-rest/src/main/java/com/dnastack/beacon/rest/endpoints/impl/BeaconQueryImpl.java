@@ -35,6 +35,7 @@ import org.keycloak.KeycloakSecurityContext;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
@@ -54,10 +55,6 @@ public class BeaconQueryImpl implements BeaconQuery {
     public BeaconAlleleResponse query(String referenceName, Long start, String referenceBases, String alternateBases,
                                       String assemblyId, List<String> datasetIds, Boolean includeDatasetResponses, @Context HttpServletRequest servletRequest)
             throws InvalidAlleleRequestException {
-
-        KeycloakSecurityContext keycloakSecurityContext = (KeycloakSecurityContext) servletRequest.getAttribute(KeycloakSecurityContext.class.getName());
-        AuthorizationContext authzContext = keycloakSecurityContext.getAuthorizationContext();
-
         validateRequest(referenceName, start, referenceBases, alternateBases, assemblyId);
         BeaconAlleleRequest request = BeaconAlleleRequest.newBuilder()
                 .setReferenceName(referenceName)
@@ -73,7 +70,7 @@ public class BeaconQueryImpl implements BeaconQuery {
     }
 
     @Override
-    public BeaconAlleleResponse query(BeaconAlleleRequest request) throws InvalidAlleleRequestException {
+    public BeaconAlleleResponse query(BeaconAlleleRequest request, @Context HttpServletRequest servletRequest) throws InvalidAlleleRequestException {
         validateRequest(request);
         return service.getBeaconAlleleResponse(request);
     }
@@ -89,7 +86,7 @@ public class BeaconQueryImpl implements BeaconQuery {
     }
 
     /**
-     * Validate the beacon fields according to the 0.3.0 beacon specifications.
+     * Validates the request parameters according to the 0.3.0 beacon specifications.
      */
     private void validateRequest(String referenceName, Long start, String referenceBases, String alternateBases, String assemblyId) throws InvalidAlleleRequestException {
         boolean isValidReferenceName = StringUtils.isNotBlank(referenceName);
