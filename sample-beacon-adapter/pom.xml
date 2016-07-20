@@ -60,7 +60,7 @@
         </dependency>
         <dependency>
             <groupId>com.dnastack</groupId>
-            <artifactId>beacon-java-core</artifactId>
+            <artifactId>beacon-java-service</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

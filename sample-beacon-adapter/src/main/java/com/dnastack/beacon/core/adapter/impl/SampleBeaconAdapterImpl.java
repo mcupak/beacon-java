@@ -201,7 +201,7 @@ public class SampleBeaconAdapterImpl implements BeaconAdapter {
         }
         boolean exists = false;
         for (BeaconDatasetAlleleResponse datasetResponses : responses) {
-            if (datasetResponses.getExists() == true) {
+            if (datasetResponses.getExists()) {
                 exists = true;
             }
         }
