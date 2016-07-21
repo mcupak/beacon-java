@@ -25,16 +25,18 @@ package com.dnastack.beacon.core.adapter.impl;
 
 import com.dnastack.beacon.adapter.api.BeaconAdapter;
 import com.dnastack.beacon.exceptions.BeaconException;
+import com.dnastack.beacon.utils.AdapterConfig;
 import org.ga4gh.beacon.*;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.Singleton;
 import javax.enterprise.context.Dependent;
 import java.util.*;
 
 /**
- * Created by patrickmagee on 2016-06-17.
+ * @author patrickmagee
  */
-@Dependent
+@Singleton
 public class SampleBeaconAdapterImpl implements BeaconAdapter {
 
     public static final String API_VERSION = "0.3.0";
@@ -49,7 +51,7 @@ public class SampleBeaconAdapterImpl implements BeaconAdapter {
         response.setDatasetId(datasetId);
 
         Map<String, Map> dataset = dataStore.getDATA().get(datasetId);
-        if (dataset == null) {
+        if (dataset == null || dataset.isEmpty()) {
             BeaconError be = new BeaconError();
             be.setErrorCode(404);
             be.setMessage("Could not find dataset");
@@ -60,7 +62,7 @@ public class SampleBeaconAdapterImpl implements BeaconAdapter {
             return response;
         }
         Map<String, Map> assembly = ((Map) dataset.get(assemblyId));
-        if (assembly == null) {
+        if (assembly == null || assembly.isEmpty()) {
             BeaconError be = new BeaconError();
             be.setErrorCode(404);
             be.setMessage("Could not find assembly in current dataset");
@@ -71,12 +73,12 @@ public class SampleBeaconAdapterImpl implements BeaconAdapter {
             return response;
         }
         Map<Long, Map> reference = ((Map) assembly.get(referencName));
-        if (reference == null) {
+        if (reference == null || reference.isEmpty()) {
             response.setExists(null);
             return addInfo(response);
         }
         Map<String, String> bases = ((Map) reference.get(start));
-        if (bases == null) {
+        if (bases == null || bases.isEmpty()) {
             response.setExists(false);
             return addInfo(response);
         }
@@ -173,6 +175,11 @@ public class SampleBeaconAdapterImpl implements BeaconAdapter {
 
     @PostConstruct
     public void init() {
+        initAdapter(null);
+    }
+
+    @Override
+    public void initAdapter(AdapterConfig adapterConfig) {
         dataStore = new SampleDataStore();
     }
 
@@ -186,11 +193,11 @@ public class SampleBeaconAdapterImpl implements BeaconAdapter {
         List<BeaconDatasetAlleleResponse> responses = new ArrayList<>();
         for (String datasetId : request.getDatasetIds()) {
             responses.add(lookupDataset(datasetId,
-                                        request.getAssemblyId(),
-                                        request.getReferenceName(),
-                                        request.getStart(),
-                                        request.getReferenceBases(),
-                                        request.getAlternateBases()));
+                    request.getAssemblyId(),
+                    request.getReferenceName(),
+                    request.getStart(),
+                    request.getReferenceBases(),
+                    request.getAlternateBases()));
         }
 
         if (!request.getIncludeDatasetResponses() && responses.size() == 1 && responses.get(0).getError() != null) {
@@ -201,12 +208,30 @@ public class SampleBeaconAdapterImpl implements BeaconAdapter {
         }
         boolean exists = false;
         for (BeaconDatasetAlleleResponse datasetResponses : responses) {
+
             if (datasetResponses.getExists()) {
                 exists = true;
             }
         }
         response.setExists(exists);
         return response;
+    }
+
+    @Override
+    public BeaconAlleleResponse getBeaconAlleleResponse(String referenceName, Long start, String referenceBases, String alternateBases, String assemblyId, List<String> datasetIds, Boolean includeDatasetResponses) throws BeaconException {
+        BeaconAlleleRequest request = new BeaconAlleleRequest();
+        request.setReferenceName(referenceName);
+        request.setStart(start);
+        request.setReferenceBases(referenceBases);
+        request.setAlternateBases(alternateBases);
+        request.setAssemblyId(assemblyId);
+        request.setDatasetIds(datasetIds);
+        if (includeDatasetResponses == null){
+            includeDatasetResponses = false;
+        }
+        request.setIncludeDatasetResponses(includeDatasetResponses);
+
+        return getBeaconAlleleResponse(request);
     }
 
     @Override
