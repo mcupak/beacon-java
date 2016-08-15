@@ -23,22 +23,20 @@
  */
 package com.dnastack.beacon.rest.endpoints.impl;
 
-import com.dnastack.beacon.core.service.BeaconService;
+import com.dnastack.beacon.adapter.api.BeaconAdapter;
+import com.dnastack.beacon.exceptions.BeaconAlleleRequestException;
+import com.dnastack.beacon.exceptions.BeaconException;
 import com.dnastack.beacon.rest.endpoints.BeaconQuery;
-import com.dnastack.beacon.rest.exceptions.InvalidAlleleRequestException;
+import com.dnastack.beacon.utils.Reason;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.ga4gh.beacon.BeaconAlleleRequest;
 import org.ga4gh.beacon.BeaconAlleleResponse;
-import org.keycloak.AuthorizationContext;
-import org.keycloak.KeycloakSecurityContext;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Request;
 import java.util.List;
 
 /**
@@ -49,12 +47,12 @@ import java.util.List;
 public class BeaconQueryImpl implements BeaconQuery {
 
     @Inject
-    private BeaconService service;
+    private BeaconAdapter adapter;
 
     @Override
     public BeaconAlleleResponse query(String referenceName, Long start, String referenceBases, String alternateBases,
                                       String assemblyId, List<String> datasetIds, Boolean includeDatasetResponses, @Context HttpServletRequest servletRequest)
-            throws InvalidAlleleRequestException {
+            throws BeaconException {
         validateRequest(referenceName, start, referenceBases, alternateBases, assemblyId);
         BeaconAlleleRequest request = BeaconAlleleRequest.newBuilder()
                 .setReferenceName(referenceName)
@@ -66,20 +64,20 @@ public class BeaconQueryImpl implements BeaconQuery {
                 .setIncludeDatasetResponses(BooleanUtils.isTrue(includeDatasetResponses))
                 .build();
 
-        return service.getBeaconAlleleResponse(request);
+        return adapter.getBeaconAlleleResponse(request);
     }
 
     @Override
-    public BeaconAlleleResponse query(BeaconAlleleRequest request, @Context HttpServletRequest servletRequest) throws InvalidAlleleRequestException {
+    public BeaconAlleleResponse query(BeaconAlleleRequest request, @Context HttpServletRequest servletRequest) throws BeaconException {
         validateRequest(request);
-        return service.getBeaconAlleleResponse(request);
+        return adapter.getBeaconAlleleResponse(request);
     }
 
-    private void validateRequest(BeaconAlleleRequest request) throws InvalidAlleleRequestException {
+    private void validateRequest(BeaconAlleleRequest request) throws BeaconAlleleRequestException {
         throwIf(request == null, "Request can't be null", request);
         try {
             validateRequest(request.getReferenceName(), request.getStart(), request.getReferenceBases(), request.getAlternateBases(), request.getAssemblyId());
-        } catch (InvalidAlleleRequestException e) {
+        } catch (BeaconAlleleRequestException e) {
             e.setRequest(request);
             throw e;
         }
@@ -88,7 +86,7 @@ public class BeaconQueryImpl implements BeaconQuery {
     /**
      * Validates the request parameters according to the 0.3.0 beacon specifications.
      */
-    private void validateRequest(String referenceName, Long start, String referenceBases, String alternateBases, String assemblyId) throws InvalidAlleleRequestException {
+    private void validateRequest(String referenceName, Long start, String referenceBases, String alternateBases, String assemblyId) throws BeaconAlleleRequestException {
         boolean isValidReferenceName = StringUtils.isNotBlank(referenceName);
         boolean isValidStart = start != null && start >= 0;
         boolean isValidReferenceBases = StringUtils.isNotBlank(referenceBases);
@@ -102,15 +100,15 @@ public class BeaconQueryImpl implements BeaconQuery {
         throwIf(!isValidAssemblyId, "Assembly ID can't be null, should start with GRCh");
     }
 
-    private static void throwIf(boolean expression, String message) throws InvalidAlleleRequestException {
+    private static void throwIf(boolean expression, String message) throws BeaconAlleleRequestException {
         if (expression) {
-            throw new InvalidAlleleRequestException(message);
+            throw new BeaconAlleleRequestException(Reason.INVALID_REQUEST, message);
         }
     }
 
-    private static void throwIf(boolean expression, String message, BeaconAlleleRequest request) throws InvalidAlleleRequestException {
+    private static void throwIf(boolean expression, String message, BeaconAlleleRequest request) throws BeaconAlleleRequestException {
         if (expression) {
-            throw new InvalidAlleleRequestException(request, message);
+            throw new BeaconAlleleRequestException(message, Reason.INVALID_REQUEST, request);
         }
     }
 }

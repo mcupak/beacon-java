@@ -21,9 +21,10 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-package com.dnastack.beacon.core.service.impl;
+package com.dnastack.beacon.adapter.sample;
 
-import com.dnastack.beacon.core.service.BeaconService;
+import com.dnastack.beacon.adapter.api.BeaconAdapter;
+import com.dnastack.beacon.utils.AdapterConfig;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.ga4gh.beacon.*;
@@ -37,15 +38,21 @@ import java.util.stream.Collectors;
 import static javax.ws.rs.core.Response.Status;
 
 /**
+ * Beacon adapter that returns sample data.
+ *
  * @author Artem (tema.voskoboynick@gmail.com)
  * @author Patrick Magee (patrickmageee@gmail.com)
  */
 @Dependent
-public class SampleBeaconServiceImpl implements BeaconService {
+public class SampleBeaconAdapter implements BeaconAdapter {
 
     @Override
     public Beacon getBeacon() {
         return SampleData.BEACON;
+    }
+
+    @Override
+    public void initAdapter(AdapterConfig adapterConfig) {
     }
 
     @Override
@@ -64,6 +71,23 @@ public class SampleBeaconServiceImpl implements BeaconService {
         return response;
     }
 
+    @Override
+    public BeaconAlleleResponse getBeaconAlleleResponse(String referenceName, Long start, String referenceBases, String alternateBases, String assemblyId, List<String> datasetIds, Boolean includeDatasetResponses) {
+        BeaconAlleleRequest request = createRequest(referenceName, start, referenceBases, alternateBases, assemblyId, datasetIds, includeDatasetResponses);
+        return getBeaconAlleleResponse(request);
+    }
+
+    private BeaconAlleleRequest createRequest(String referenceName, Long start, String referenceBases, String alternateBases, String assemblyId, List<String> datasetIds, Boolean includeDatasetResponses) {
+        return BeaconAlleleRequest.newBuilder()
+                .setReferenceName(referenceName)
+                .setStart(start)
+                .setReferenceBases(referenceBases)
+                .setAlternateBases(alternateBases)
+                .setAssemblyId(assemblyId)
+                .setDatasetIds(datasetIds)
+                .setIncludeDatasetResponses(includeDatasetResponses)
+                .build();
+    }
 
     private DatasetsQueryResult queryDatasets(List<String> datasetIds, String assemblyId, String referenceName, Long start,
                                               String referenceBases, String alternateBases) {

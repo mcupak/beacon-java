@@ -23,9 +23,9 @@
  */
 package com.dnastack.beacon.rest.endpoints.impl;
 
-import com.dnastack.beacon.core.service.BeaconService;
+import com.dnastack.beacon.adapter.api.BeaconAdapter;
+import com.dnastack.beacon.exceptions.BeaconException;
 import com.dnastack.beacon.rest.endpoints.BeaconInfo;
-import com.dnastack.beacon.rest.exceptions.BeaconException;
 import org.ga4gh.beacon.Beacon;
 
 import javax.inject.Inject;
@@ -41,12 +41,12 @@ import javax.ws.rs.core.MediaType;
 public class BeaconInfoImpl implements BeaconInfo {
 
     @Inject
-    private BeaconService service;
+    private BeaconAdapter adapter;
 
     @GET
     @Override
     @Produces({MediaType.APPLICATION_JSON})
     public Beacon info() throws BeaconException {
-        return service.getBeacon();
+        return adapter.getBeacon();
     }
 }

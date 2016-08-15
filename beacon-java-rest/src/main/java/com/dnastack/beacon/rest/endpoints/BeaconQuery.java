@@ -23,7 +23,7 @@
  */
 package com.dnastack.beacon.rest.endpoints;
 
-import com.dnastack.beacon.rest.exceptions.InvalidAlleleRequestException;
+import com.dnastack.beacon.exceptions.BeaconException;
 import org.ga4gh.beacon.BeaconAlleleRequest;
 import org.ga4gh.beacon.BeaconAlleleResponse;
 
@@ -69,7 +69,7 @@ public interface BeaconQuery {
                                @QueryParam("assemblyId") String assemblyId,
                                @QueryParam("datasetIds") List<String> datasetIds,
                                @QueryParam("includeDatasetResponses") Boolean includeDatasetResponses,
-                               @Context HttpServletRequest servletRequest) throws InvalidAlleleRequestException;
+                               @Context HttpServletRequest servletRequest) throws BeaconException;
 
     /**
      * Query a beacon resource for information on whether an allele exists or not. Optionally includes the datasets.
@@ -79,6 +79,6 @@ public interface BeaconQuery {
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    BeaconAlleleResponse query(BeaconAlleleRequest request, @Context HttpServletRequest servletRequest) throws InvalidAlleleRequestException;
+    BeaconAlleleResponse query(BeaconAlleleRequest request, @Context HttpServletRequest servletRequest) throws BeaconException;
 
 }

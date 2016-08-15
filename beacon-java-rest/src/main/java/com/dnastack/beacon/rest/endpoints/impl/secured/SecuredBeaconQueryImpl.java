@@ -1,8 +1,8 @@
 package com.dnastack.beacon.rest.endpoints.impl.secured;
 
+import com.dnastack.beacon.exceptions.BeaconException;
 import com.dnastack.beacon.rest.endpoints.BeaconQuery;
 import com.dnastack.beacon.rest.endpoints.impl.BeaconQueryImpl;
-import com.dnastack.beacon.rest.exceptions.InvalidAlleleRequestException;
 import com.dnastack.beacon.rest.sys.security.SecurityContext;
 import org.apache.commons.collections.CollectionUtils;
 import org.ga4gh.beacon.BeaconAlleleRequest;
@@ -58,14 +58,14 @@ public class SecuredBeaconQueryImpl implements BeaconQuery {
     private SecurityContext securityContext;
 
     @Override
-    public BeaconAlleleResponse query(String referenceName, Long start, String referenceBases, String alternateBases, String assemblyId, List<String> datasetIds, Boolean includeDatasetResponses, @Context HttpServletRequest servletRequest) throws InvalidAlleleRequestException {
+    public BeaconAlleleResponse query(String referenceName, Long start, String referenceBases, String alternateBases, String assemblyId, List<String> datasetIds, Boolean includeDatasetResponses, @Context HttpServletRequest servletRequest) throws BeaconException {
         BeaconAlleleResponse response = delegate.query(referenceName, start, referenceBases, alternateBases, assemblyId, datasetIds, includeDatasetResponses, servletRequest);
         ensureSecurityConstraints(servletRequest, response);
         return response;
     }
 
     @Override
-    public BeaconAlleleResponse query(BeaconAlleleRequest request, @Context HttpServletRequest servletRequest) throws InvalidAlleleRequestException {
+    public BeaconAlleleResponse query(BeaconAlleleRequest request, @Context HttpServletRequest servletRequest) throws BeaconException {
         BeaconAlleleResponse response = delegate.query(request, servletRequest);
         ensureSecurityConstraints(servletRequest, response);
         return response;

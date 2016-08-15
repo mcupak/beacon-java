@@ -11,7 +11,7 @@
     <name>beacon-java</name>
 
     <modules>
-        <module>sample-beacon-service</module>
+        <module>sample-beacon-adapter</module>
         <module>beacon-java-rest</module>
     </modules>
 
@@ -161,6 +161,11 @@
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
                 <version>${version.httpcomponents}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.dnastack</groupId>
+                <artifactId>beacon-adapter-api</artifactId>
+                <version>${version.beacon.adapter.api}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -119,15 +119,17 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
         </dependency>
-
-        <!-- Sample Beacon Service -->
         <dependency>
             <groupId>com.dnastack</groupId>
-            <artifactId>sample-beacon-service</artifactId>
+            <artifactId>beacon-adapter-api</artifactId>
+            <version>${version.beacon.adapter.api}</version>
+        </dependency>
+        <dependency>
+            <!-- Sample Beacon Adapter -->
+            <groupId>com.dnastack</groupId>
+            <artifactId>sample-beacon-adapter</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <!-- End your sample beacon service -->
-
     </dependencies>
 
     <build>

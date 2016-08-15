@@ -22,7 +22,7 @@
  *  THE SOFTWARE.
  */
 
-package com.dnastack.beacon.core.service.impl;
+package com.dnastack.beacon.adapter.sample;
 
 import avro.shaded.com.google.common.collect.ImmutableMap;
 import org.ga4gh.beacon.*;

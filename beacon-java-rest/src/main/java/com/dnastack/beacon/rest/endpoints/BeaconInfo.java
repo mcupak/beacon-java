@@ -23,7 +23,7 @@
  */
 package com.dnastack.beacon.rest.endpoints;
 
-import com.dnastack.beacon.rest.exceptions.BeaconException;
+import com.dnastack.beacon.exceptions.BeaconException;
 import org.ga4gh.beacon.Beacon;
 
 import javax.ws.rs.GET;

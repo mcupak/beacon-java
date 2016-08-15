@@ -1,7 +1,7 @@
 package com.dnastack.beacon.rest.sys;
 
-import com.dnastack.beacon.rest.exceptions.BeaconException;
-import com.dnastack.beacon.rest.exceptions.InvalidAlleleRequestException;
+import com.dnastack.beacon.exceptions.BeaconAlleleRequestException;
+import com.dnastack.beacon.exceptions.BeaconException;
 import org.ga4gh.beacon.BeaconAlleleResponse;
 import org.ga4gh.beacon.BeaconError;
 
@@ -24,8 +24,8 @@ public class BeaconExceptionHandler implements ExceptionMapper<BeaconException> 
 
     @Override
     public Response toResponse(BeaconException exception) {
-        if (exception instanceof InvalidAlleleRequestException) {
-            return handleInvalidAlleleRequestException((InvalidAlleleRequestException) exception);
+        if (exception instanceof BeaconAlleleRequestException) {
+            return handleBeaconAlleleRequestException((BeaconAlleleRequestException) exception);
         } else {
             return handleDefaultBeaconException(exception);
         }
@@ -35,7 +35,7 @@ public class BeaconExceptionHandler implements ExceptionMapper<BeaconException> 
      * Due to backward compatibility issues, the response on Beacon Query request should always be of the {@link BeaconAlleleResponse} type,
      * and any errors, if any, are stored inside it.
      */
-    private Response handleInvalidAlleleRequestException(InvalidAlleleRequestException exception) {
+    private Response handleBeaconAlleleRequestException(BeaconAlleleRequestException exception) {
         BeaconAlleleResponse response = new BeaconAlleleResponse();
         response.setAlleleRequest(exception.getRequest());
         response.setExists(null);

@@ -17,13 +17,12 @@
         </session-timeout>
     </session-config>
 
-    <!-- Uncomment to enable Keycloak security. -->
-    <!--
+    <!-- Keycloak security is disabled by default. -->
+    <!-- To enable, change this parameter to true. -->
     <context-param>
         <param-name>keycloak.security.enabled</param-name>
-        <param-value>true</param-value>
+        <param-value>false</param-value>
     </context-param>
-    -->
 
     <filter>
         <filter-name>Keycloak Filter</filter-name>
