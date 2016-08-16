@@ -21,30 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.rest.impl;
+package com.dnastack.beacon.rest.endpoints;
 
 import com.dnastack.beacon.exceptions.BeaconException;
-import com.dnastack.beacon.rest.api.BeaconInfo;
-import com.dnastack.beacon.service.api.BeaconService;
 import org.ga4gh.beacon.Beacon;
 
-import javax.inject.Inject;
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 /**
- * Beacon Info Implementation
+ * @author Miroslav Cupak (mirocupak@gmail.com)
+ * @author Patrick Magee    (patrickmageee@gmail.com)
+ * @author Artem (tema.voskoboynick@gmail.com)
+ * @version 1.0
  */
 @Path("/")
-public class BeaconInfoImpl implements BeaconInfo {
-
-    @Inject
-    private BeaconService service;
+public interface BeaconInfo {
 
     /**
-     * {@inheritDoc}
+     * Gets information on the beacon.
      */
-    @Override
-    public Beacon info() throws BeaconException {
-        return service.queryBeacon();
-    }
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    Beacon info() throws BeaconException;
 }

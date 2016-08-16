@@ -21,33 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.rest.api;
+package com.dnastack.beacon.rest;
 
-import com.dnastack.beacon.exceptions.BeaconException;
-import org.ga4gh.beacon.Beacon;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Application;
 
 /**
- * Beacon rest resource.
+ * REST beacon application.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
- * @author Patrick Magee    (patrickmageee@gmail.com)
  * @version 1.0
  */
-@Path("/")
-public interface BeaconInfo {
+@ApplicationPath("/")
+public class BeaconApplication extends Application {
 
-    /**
-     * Gets Information on the beacon
-     *
-     * @return Beacon represenation
-     * @throws BeaconException
-     */
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    Beacon info() throws BeaconException;
 }

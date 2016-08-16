@@ -21,46 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.rest.impl;
+package com.dnastack.beacon.rest.endpoints.impl;
 
+import com.dnastack.beacon.adapter.api.BeaconAdapter;
 import com.dnastack.beacon.exceptions.BeaconException;
-import com.dnastack.beacon.rest.api.BeaconQuery;
-import com.dnastack.beacon.service.api.BeaconService;
-import org.ga4gh.beacon.BeaconAlleleRequest;
-import org.ga4gh.beacon.BeaconAlleleResponse;
+import com.dnastack.beacon.rest.endpoints.BeaconInfo;
+import org.ga4gh.beacon.Beacon;
 
 import javax.inject.Inject;
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import java.util.List;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 /**
- * Beacon Query Implementation
+ * @author Artem (tema.voskoboynick@gmail.com)
  */
-@Path("/query")
-public class BeaconQueryImpl implements BeaconQuery {
+@Path("/")
+public class BeaconInfoImpl implements BeaconInfo {
 
     @Inject
-    private BeaconService service;
+    private BeaconAdapter adapter;
 
-    /**
-     * {@inheritDoc}
-     */
+    @GET
     @Override
-    public BeaconAlleleResponse query(String referenceName, Long start, String referenceBases, String alternateBases, String assemblyId, List<String> datasetIds, Boolean includeDatasetResponses) throws BeaconException {
-        return service.queryAllele(referenceName,
-                                   start,
-                                   referenceBases,
-                                   alternateBases,
-                                   assemblyId,
-                                   datasetIds,
-                                   includeDatasetResponses);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public BeaconAlleleResponse query(BeaconAlleleRequest request) throws BeaconException {
-        return service.queryAllele(request);
+    @Produces({MediaType.APPLICATION_JSON})
+    public Beacon info() throws BeaconException {
+        return adapter.getBeacon();
     }
 }

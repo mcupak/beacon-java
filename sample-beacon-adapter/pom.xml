@@ -26,16 +26,16 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <artifactId>beacon-java</artifactId>
         <groupId>com.dnastack</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
-    <name>sample-beacon-adapter</name>
-
-    <packaging>jar</packaging>
+    <artifactId>sample-beacon-adapter</artifactId>
+    <name>Sample Beacon Adapter</name>
 
     <dependencies>
         <dependency>
@@ -60,13 +60,7 @@
         </dependency>
         <dependency>
             <groupId>com.dnastack</groupId>
-            <artifactId>beacon-java-service</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.dnastack</groupId>
             <artifactId>beacon-adapter-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
@@ -85,8 +79,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <artifactId>sample-beacon-adapter</artifactId>
-
 
 </project>

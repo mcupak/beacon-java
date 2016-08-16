@@ -21,21 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.rest.api;
+package com.dnastack.beacon.rest.endpoints;
 
 import com.dnastack.beacon.exceptions.BeaconException;
 import org.ga4gh.beacon.BeaconAlleleRequest;
 import org.ga4gh.beacon.BeaconAlleleResponse;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 /**
- * Beacon rest resource for querying alle information from a beacon
+ * Beacon rest resource for querying allele information from a beacon.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @author Patrick Magee    (patrickmageee@gmail.com)
+ * @author Artem (tema.voskoboynick@gmail.com)
  * @version 1.0
  */
 @Path("/query")
@@ -43,35 +46,39 @@ public interface BeaconQuery {
 
     /**
      * Query a beacon resource for information on whether an allele exists or not. Optionally includes the datasets.
-     * Returns the completed BeaconAlleleResponse, Or a BeaconAlleleResponse with a BeaconError object if an error
+     * Returns the completed BeaconAlleleResponse or a BeaconAlleleResponse with a BeaconError object if an error
      * was encountered.
      *
-     * @param referenceName           Name of the chromosome or contig
+     * @param referenceName           reference name (chromosome). Accepted values: 1-22, X, Y
      * @param start                   0-base start position
-     * @param referenceBases          String of reference bases
-     * @param alternateBases          String of alternate bases
-     * @param assemblyId              String of assembly build version
-     * @param datasetIds              List of dataset Ids
-     * @param includeDatasetResponses Boolean value to include Dataset responses
-     * @return Completed Beacon response object
-     * @throws BeaconException
+     * @param referenceBases          reference bases for this variant (starting from `start`). Accepted values: see the
+     *                                REF field in VCF 4.2 specification (https://samtools.github.io/hts-specs/VCFv4.2.pdf)
+     * @param alternateBases          the bases that appear instead of the reference bases. Accepted values: see the ALT
+     *                                field in VCF 4.2 specification (https://samtools.github.io/hts-specs/VCFv4.2.pdf)
+     * @param assemblyId              assembly identifier (GRC notation, e.g. `GRCh37`)
+     * @param datasetIds              identifiers of datasets. If this field is null, all datasets will be queried
+     * @param includeDatasetResponses indicator of whether responses for individual datasets should be included (not null)
+     *                                in the response. If null, the default value of false is assumed
      */
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    BeaconAlleleResponse query(@QueryParam("referenceName") String referenceName, @QueryParam("start") Long start, @QueryParam("referenceBases") String referenceBases, @QueryParam("alternateBases") String alternateBases, @QueryParam("assemblyId") String assemblyId, @QueryParam("datasetIds") List<String> datasetIds, @QueryParam("includeDatasetResponses") Boolean includeDatasetResponses) throws BeaconException;
+    BeaconAlleleResponse query(@QueryParam("referenceName") String referenceName,
+                               @QueryParam("start") Long start,
+                               @QueryParam("referenceBases") String referenceBases,
+                               @QueryParam("alternateBases") String alternateBases,
+                               @QueryParam("assemblyId") String assemblyId,
+                               @QueryParam("datasetIds") List<String> datasetIds,
+                               @QueryParam("includeDatasetResponses") Boolean includeDatasetResponses,
+                               @Context HttpServletRequest servletRequest) throws BeaconException;
 
     /**
      * Query a beacon resource for information on whether an allele exists or not. Optionally includes the datasets.
      * Returns the completed BeaconAlleleResponse, Or a BeaconAlleleResponse with a BeaconError object if an error
      * was encountered.
-     *
-     * @param request Completed Beacon response object
-     * @return
-     * @throws BeaconException
      */
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    BeaconAlleleResponse query(BeaconAlleleRequest request) throws BeaconException;
+    BeaconAlleleResponse query(BeaconAlleleRequest request, @Context HttpServletRequest servletRequest) throws BeaconException;
 
 }

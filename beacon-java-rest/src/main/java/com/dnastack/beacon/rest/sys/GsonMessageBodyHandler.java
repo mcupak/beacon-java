@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.providers;
+package com.dnastack.beacon.rest.sys;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -37,11 +37,13 @@ import javax.ws.rs.ext.Provider;
 import java.io.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 
 /**
- * Gson Message Body Handler for serializing JSON data to and from auto generated Java classes
+ * Gson Message Body Handler for serializing JSON data to and from auto generated Java classes.
  *
  * @author patmagee
+ * @author Artem (tema.voskoboynick@gmail.com)
  * @version 1.0
  */
 @Provider
@@ -49,16 +51,8 @@ import java.lang.reflect.Type;
 @Consumes(MediaType.APPLICATION_JSON)
 public class GsonMessageBodyHandler implements MessageBodyReader<Object>, MessageBodyWriter<Object> {
 
-    private static final String UTF_8 = "UTF-8";
-
-    private Gson gson;
-
-    private Gson getGson() {
-        if (gson == null) {
-            gson = new GsonBuilder().create();
-        }
-        return gson;
-    }
+    private static final Gson GSON = new GsonBuilder().create();
+    private static final int UNKNOWN_LENGTH = -1;
 
     @Override
     public boolean isReadable(Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType) {
@@ -66,20 +60,18 @@ public class GsonMessageBodyHandler implements MessageBodyReader<Object>, Messag
     }
 
     @Override
-    public Object readFrom(Class<Object> aClass, Type type, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> multivaluedMap, InputStream inputStream) throws IOException, WebApplicationException {
-        InputStreamReader streamReader = new InputStreamReader(inputStream, UTF_8);
-        try {
-            Type jsonType;
-            if (type == null) {
-                jsonType = aClass;
-            } else if (aClass.equals(type)) {
-                jsonType = aClass;
-            } else {
-                jsonType = type;
-            }
-            return getGson().fromJson(streamReader, jsonType);
-        } finally {
-            streamReader.close();
+    public Object readFrom(Class<Object> aClass, Type type, Annotation[] annotations, MediaType mediaType,
+                           MultivaluedMap<String, String> multivaluedMap, InputStream inputStream) throws IOException,
+            WebApplicationException {
+        Type objectType;
+        if (type == null || aClass.equals(type)) {
+            objectType = aClass;
+        } else {
+            objectType = type;
+        }
+
+        try (InputStreamReader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
+            return GSON.fromJson(reader, objectType);
         }
     }
 
@@ -90,24 +82,22 @@ public class GsonMessageBodyHandler implements MessageBodyReader<Object>, Messag
 
     @Override
     public long getSize(Object o, Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType) {
-        return -1;
+        return UNKNOWN_LENGTH;
     }
 
     @Override
-    public void writeTo(Object o, Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> multivaluedMap, OutputStream outputStream) throws IOException, WebApplicationException {
-        OutputStreamWriter writer = new OutputStreamWriter(outputStream, UTF_8);
-        try {
-            Type jsonType;
-            if (type == null) {
-                jsonType = aClass;
-            } else if (aClass.equals(type)) {
-                jsonType = aClass;
-            } else {
-                jsonType = type;
-            }
-            getGson().toJson(o, jsonType, writer);
-        } finally {
-            writer.close();
+    public void writeTo(Object o, Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType,
+                        MultivaluedMap<String, Object> multivaluedMap, OutputStream outputStream) throws IOException,
+            WebApplicationException {
+        Type objectType;
+        if (type == null || aClass.equals(type)) {
+            objectType = aClass;
+        } else {
+            objectType = type;
+        }
+
+        try (OutputStreamWriter writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)) {
+            GSON.toJson(o, objectType, writer);
         }
     }
 }

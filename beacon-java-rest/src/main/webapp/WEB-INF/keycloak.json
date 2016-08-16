@@ -1,0 +1,11 @@
+{
+  "realm": "beacon-realm",
+  "realm-public-key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsRX+fPYkN9fXgbRq9BCrVW8F2HrWUV4ss3bpeeT71n04uqD+v0Q9R9rfR3wG7uf/iB3PVASkmVS2Up7UwsuOZn2dmzyCRmom4O+oj6lzFWgSYuGwmY2rpmDg1m7apDR9cMODXI9D8Yqk7miGDo6+W10Xh9vA/IXH24OuuI4Mgs1mEoSZZC068YsRr9J0Dt58ttkr7PHCm7P2wqr5fDRhfY67q2w1lMW384GZxA7x0P7MGUebd1swPuQvZUyZuU/lVLca/lRX7D8g4gK9NYyUI/FBGUf4EPFVvYjmfmIvl3HWerkkZuL9U8Etr0WaOMig1sY4KWbQiaQtQVsV7V4ASQIDAQAB",
+  "auth-server-url": "http://localhost:8280/auth",
+  "ssl-required": "external",
+  "resource": "beacon-rest",
+  "credentials": {
+    "secret": "01d0bc41-1365-4922-b1ec-a241196735fa"
+  },
+  "policy-enforcer": {}
+}

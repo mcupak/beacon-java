@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
+ * Copyright 2014 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,18 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.application;
+package com.dnastack.beacon.rest.sys;
 
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
+import org.ga4gh.beacon.BeaconError;
+
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.ExceptionMapper;
+import javax.ws.rs.ext.Provider;
+
+import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 
 /**
- * REST beacon application.
+ * Catches all non Beacon exceptions thrown by the rest resources.
  *
- * @author Miroslav Cupak (mirocupak@gmail.com)
- * @version 1.0
+ * @author patmagee
+ * @author Artem (tema.voskoboynick@gmail.com)
  */
-@ApplicationPath("/")
-public class BeaconApplication extends Application {
+@Provider
+public class DefaultExceptionHandler implements ExceptionMapper<Throwable> {
 
+    @Override
+    public Response toResponse(Throwable exception) {
+        BeaconError response = BeaconError.newBuilder()
+                .setMessage(exception.getMessage())
+                .setErrorCode(INTERNAL_SERVER_ERROR.getStatusCode())
+                .build();
+
+        return Response.status(response.getErrorCode()).type(MediaType.APPLICATION_JSON).entity(response).build();
+    }
 }
