@@ -184,7 +184,6 @@ public class SampleBeaconAdapterImpl implements BeaconAdapter {
 
     @Override
     public BeaconAlleleResponse getBeaconAlleleResponse(BeaconAlleleRequest request) throws BeaconException {
-
         BeaconAlleleResponse response = new BeaconAlleleResponse();
         response.setBeaconId(BEACON_ID);
         response.setAlleleRequest(request);

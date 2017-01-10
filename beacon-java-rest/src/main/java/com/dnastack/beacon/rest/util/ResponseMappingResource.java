@@ -21,11 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.util;
+package com.dnastack.beacon.rest.util;
 
 import javax.persistence.NoResultException;
 import javax.ws.rs.NotFoundException;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import java.util.Collections;
 import java.util.HashMap;
@@ -39,7 +38,7 @@ import java.util.Map;
  */
 public class ResponseMappingResource {
 
-    private static final Map<String, Response.Status> mapping;
+    private static final Map<String, Status> mapping;
 
     static {
         Map<String, Status> map = new HashMap<>();

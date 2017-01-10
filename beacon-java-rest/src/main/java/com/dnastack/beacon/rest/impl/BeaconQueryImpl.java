@@ -30,7 +30,8 @@ import org.ga4gh.beacon.BeaconAlleleRequest;
 import org.ga4gh.beacon.BeaconAlleleResponse;
 
 import javax.inject.Inject;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 /**
@@ -47,8 +48,10 @@ public class BeaconQueryImpl implements BeaconQuery {
     /**
      * {@inheritDoc}
      */
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
     @Override
-    public BeaconAlleleResponse query(String referenceName, Long start, String referenceBases, String alternateBases, String assemblyId, List<String> datasetIds, Boolean includeDatasetResponses) throws BeaconException {
+    public BeaconAlleleResponse query(@QueryParam("referenceName") String referenceName, @QueryParam("start") Long start, @QueryParam("referenceBases") String referenceBases, @QueryParam("alternateBases") String alternateBases, @QueryParam("assemblyId") String assemblyId, @QueryParam("datasetIds") List<String> datasetIds, @QueryParam("includeDatasetResponses") Boolean includeDatasetResponses) throws BeaconException {
         return service.queryAllele(referenceName,
                                    start,
                                    referenceBases,
@@ -61,6 +64,9 @@ public class BeaconQueryImpl implements BeaconQuery {
     /**
      * {@inheritDoc}
      */
+    @POST
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
     @Override
     public BeaconAlleleResponse query(BeaconAlleleRequest request) throws BeaconException {
         return service.queryAllele(request);

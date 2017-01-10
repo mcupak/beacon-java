@@ -26,11 +26,6 @@ package com.dnastack.beacon.rest.api;
 import com.dnastack.beacon.exceptions.BeaconException;
 import org.ga4gh.beacon.Beacon;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
 /**
  * Beacon REST resource.
  *
@@ -38,7 +33,6 @@ import javax.ws.rs.core.MediaType;
  * @author Patrick Magee    (patrickmageee@gmail.com)
  * @version 1.0
  */
-@Path("/")
 public interface BeaconInfo {
 
     /**
@@ -47,7 +41,5 @@ public interface BeaconInfo {
      * @return Beacon represenation
      * @throws BeaconException
      */
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
     Beacon info() throws BeaconException;
 }

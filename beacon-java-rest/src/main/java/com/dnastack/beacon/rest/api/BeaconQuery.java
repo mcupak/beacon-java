@@ -27,8 +27,6 @@ import com.dnastack.beacon.exceptions.BeaconException;
 import org.ga4gh.beacon.BeaconAlleleRequest;
 import org.ga4gh.beacon.BeaconAlleleResponse;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 /**
@@ -38,7 +36,6 @@ import java.util.List;
  * @author Patrick Magee    (patrickmageee@gmail.com)
  * @version 1.0
  */
-@Path("/query")
 public interface BeaconQuery {
 
     /**
@@ -56,9 +53,7 @@ public interface BeaconQuery {
      * @return Completed Beacon response object
      * @throws BeaconException
      */
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    BeaconAlleleResponse query(@QueryParam("referenceName") String referenceName, @QueryParam("start") Long start, @QueryParam("referenceBases") String referenceBases, @QueryParam("alternateBases") String alternateBases, @QueryParam("assemblyId") String assemblyId, @QueryParam("datasetIds") List<String> datasetIds, @QueryParam("includeDatasetResponses") Boolean includeDatasetResponses) throws BeaconException;
+    BeaconAlleleResponse query(String referenceName, Long start, String referenceBases, String alternateBases, String assemblyId, List<String> datasetIds, Boolean includeDatasetResponses) throws BeaconException;
 
     /**
      * Query a beacon resource for information on whether an allele exists or not. Optionally includes the datasets.
@@ -69,9 +64,6 @@ public interface BeaconQuery {
      * @return
      * @throws BeaconException
      */
-    @POST
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
     BeaconAlleleResponse query(BeaconAlleleRequest request) throws BeaconException;
 
 }

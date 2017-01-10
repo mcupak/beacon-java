@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.application;
+package com.dnastack.beacon.rest.application;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;

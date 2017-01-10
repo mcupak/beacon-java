@@ -40,3 +40,5 @@ nbactions*.xml
 *.class
 
 .DS_Store
+
+rebel.xml

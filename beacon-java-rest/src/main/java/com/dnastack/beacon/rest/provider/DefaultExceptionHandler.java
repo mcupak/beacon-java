@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.providers;
+package com.dnastack.beacon.rest.provider;
 
-import com.dnastack.beacon.util.ResponseMappingResource;
+import com.dnastack.beacon.rest.util.ResponseMappingResource;
 import org.ga4gh.beacon.BeaconError;
 import org.json.simple.JSONObject;
 
