@@ -32,7 +32,9 @@ import javax.inject.Inject;
 import javax.ws.rs.Path;
 
 /**
- * Beacon Info Implementation
+ * Beacon info implementation
+ *
+ * @author Miroslav Cupak (mirocupak@gmail.com)
  */
 @Path("/")
 public class BeaconInfoImpl implements BeaconInfo {

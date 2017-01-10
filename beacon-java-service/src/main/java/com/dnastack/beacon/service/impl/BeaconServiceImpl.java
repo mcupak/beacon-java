@@ -82,7 +82,6 @@ public class BeaconServiceImpl implements BeaconService {
      **/
     @Override
     public BeaconAlleleResponse queryAllele(String referenceName, Long start, String referenceBases, String alternateBases, String assemblyId, List<String> datasetIds, Boolean includeDatasetResponses) throws BeaconException {
-
         validateRequest(referenceName, start, referenceBases, alternateBases, assemblyId);
 
         if (includeDatasetResponses == null) {

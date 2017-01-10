@@ -26,24 +26,28 @@ package com.dnastack.beacon.util;
 import javax.persistence.NoResultException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by patrickmagee on 2016-06-16.
+ * Mapping of exceptions to status codes.
+ *
+ * @author Miroslav Cupak (mirocupak@gmail.com)
+ * @version 1.0
  */
 public class ResponseMappingResource {
 
     private static final Map<String, Response.Status> mapping;
 
     static {
-        Map<String, Response.Status> map = new HashMap<>();
-        map.put(NotFoundException.class.getCanonicalName(), Response.Status.NOT_FOUND);
-        map.put(NoResultException.class.getCanonicalName(), Response.Status.NOT_FOUND);
-        map.put(IllegalArgumentException.class.getCanonicalName(), Response.Status.BAD_REQUEST);
-        map.put(UnsupportedOperationException.class.getCanonicalName(), Response.Status.METHOD_NOT_ALLOWED);
-        map.put(SecurityException.class.getCanonicalName(), Response.Status.FORBIDDEN);
+        Map<String, Status> map = new HashMap<>();
+        map.put(NotFoundException.class.getCanonicalName(), Status.NOT_FOUND);
+        map.put(NoResultException.class.getCanonicalName(), Status.NOT_FOUND);
+        map.put(IllegalArgumentException.class.getCanonicalName(), Status.BAD_REQUEST);
+        map.put(UnsupportedOperationException.class.getCanonicalName(), Status.METHOD_NOT_ALLOWED);
+        map.put(SecurityException.class.getCanonicalName(), Status.FORBIDDEN);
         mapping = Collections.unmodifiableMap(map);
     }
 
@@ -54,9 +58,9 @@ public class ResponseMappingResource {
      * @param ex exceptions
      * @return response status
      */
-    public static Response.Status getStatus(Exception ex) {
-        Response.Status s = mapping.get(ex.getClass().getCanonicalName());
+    public static Status getStatus(Exception ex) {
+        Status s = mapping.get(ex.getClass().getCanonicalName());
 
-        return (s == null) ? Response.Status.INTERNAL_SERVER_ERROR : s;
+        return (s == null) ? Status.INTERNAL_SERVER_ERROR : s;
     }
 }

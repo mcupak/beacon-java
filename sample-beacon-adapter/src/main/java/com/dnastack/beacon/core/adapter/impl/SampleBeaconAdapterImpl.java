@@ -30,7 +30,6 @@ import org.ga4gh.beacon.*;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
-import javax.enterprise.context.Dependent;
 import java.util.*;
 
 /**
@@ -193,11 +192,11 @@ public class SampleBeaconAdapterImpl implements BeaconAdapter {
         List<BeaconDatasetAlleleResponse> responses = new ArrayList<>();
         for (String datasetId : request.getDatasetIds()) {
             responses.add(lookupDataset(datasetId,
-                    request.getAssemblyId(),
-                    request.getReferenceName(),
-                    request.getStart(),
-                    request.getReferenceBases(),
-                    request.getAlternateBases()));
+                                        request.getAssemblyId(),
+                                        request.getReferenceName(),
+                                        request.getStart(),
+                                        request.getReferenceBases(),
+                                        request.getAlternateBases()));
         }
 
         if (!request.getIncludeDatasetResponses() && responses.size() == 1 && responses.get(0).getError() != null) {
@@ -226,7 +225,7 @@ public class SampleBeaconAdapterImpl implements BeaconAdapter {
         request.setAlternateBases(alternateBases);
         request.setAssemblyId(assemblyId);
         request.setDatasetIds(datasetIds);
-        if (includeDatasetResponses == null){
+        if (includeDatasetResponses == null) {
             includeDatasetResponses = false;
         }
         request.setIncludeDatasetResponses(includeDatasetResponses);

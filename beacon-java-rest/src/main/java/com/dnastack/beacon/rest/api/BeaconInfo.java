@@ -32,7 +32,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 /**
- * Beacon rest resource.
+ * Beacon REST resource.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @author Patrick Magee    (patrickmageee@gmail.com)

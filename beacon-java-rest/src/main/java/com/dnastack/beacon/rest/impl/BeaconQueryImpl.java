@@ -34,7 +34,9 @@ import javax.ws.rs.Path;
 import java.util.List;
 
 /**
- * Beacon Query Implementation
+ * Beacon query implementation.
+ *
+ * @author Miroslav Cupak (mirocupak@gmail.com)
  */
 @Path("/query")
 public class BeaconQueryImpl implements BeaconQuery {
