@@ -25,7 +25,6 @@ package com.dnastack.beacon.service.api;
 
 import com.dnastack.beacon.exceptions.BeaconAlleleRequestException;
 import com.dnastack.beacon.exceptions.BeaconException;
-import org.apache.avro.AvroRemoteException;
 import org.ga4gh.beacon.Beacon;
 import org.ga4gh.beacon.BeaconAlleleRequest;
 import org.ga4gh.beacon.BeaconAlleleResponse;
@@ -51,7 +50,7 @@ public interface BeaconService {
      * @param datasetIds              Dataset Ids to search, if null search all
      * @param includeDatasetResponses Include datasets in return.
      * @return Beacon allele response
-     * @throws AvroRemoteException
+     * @throws BeaconException
      */
     BeaconAlleleResponse queryAllele(String referenceName, Long start, String referenceBases, String alternateBases, String assemblyId, List<String> datasetIds, Boolean includeDatasetResponses) throws BeaconException;
 

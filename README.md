@@ -8,6 +8,7 @@ The setup is split into the following modules:
 - [beacon-java-rest](/beacon-java-rest) - REST API.
 - [beacon-java-service](/beacon-java-service) - business logic.
 - [sample-beacon-adapter](/sample-beacon-adapter) - sample adapter implementation.
+- [beacon-adapter-variants](/beacon-adapter-variants) - Beacon adapter for GA4GH Variants API
 
 ## Building
 Prerequisites: Java 8+, Maven 3+, an application server with Java EE 7 support (e.g. WildFly 8+), [Beacon data model](https://github.com/ga4gh/beacon-team).

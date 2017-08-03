@@ -44,10 +44,13 @@ import javax.ws.rs.ext.Provider;
 public class BeaconExceptionHandler implements ExceptionMapper<BeaconException> {
 
     @Inject
-    BeaconService service;
+    private BeaconService service;
 
     @Override
     public Response toResponse(BeaconException exception) {
+        if (exception == null || exception.getReason() == null) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(exception).build();
+        }
 
         BeaconError error = new BeaconError();
         error.setMessage(exception.getMessage());
@@ -80,8 +83,8 @@ public class BeaconExceptionHandler implements ExceptionMapper<BeaconException> 
             return Response.status(error.getErrorCode()).entity(response).build();
 
         } else {
-            BeaconError response = error;
             return Response.status(error.getErrorCode()).entity(error).build();
         }
     }
+
 }

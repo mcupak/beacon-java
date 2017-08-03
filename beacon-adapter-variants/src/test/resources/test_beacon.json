@@ -1,0 +1,58 @@
+{
+  "id": "sample-beacon",
+  "name": "variant_test_beacon",
+  "apiVersion": "0.3",
+  "organization": {
+    "id": "variant_org",
+    "name": "variant Adapter organization",
+    "description": "test organization for the variant Beacon adapter",
+    "address": "99 Lambda Drive, Consumer, Canada",
+    "welcomeUrl": "www.welcome.com",
+    "contactUrl": "www.contact.com",
+    "logoUrl": "www.logo.com"
+  },
+  "description": "This beacon demonstrates the usage of the variantBeaconAdapter",
+  "version": "1",
+  "welcomeUrl": "www.welcome.com",
+  "alternativeUrl": "www.alternative.com",
+  "createDateTime": "2016/07/23 19:23:11",
+  "updateDateTime": "2016/07/23 19:23:11",
+  "datasets": [
+    {
+      "id": "test-dataset",
+      "name": "variant-test-gt",
+      "description": "variant Adapter test dataset which includes sample / gt info",
+      "assemblyId": "test-assembly",
+      "createDateTime": "2016/07/23 19:23:11",
+      "updateDateTime": "2016/07/23 19:23:11",
+      "version": "1",
+      "variantCount": 26,
+      "sampleCount": 1,
+      "externalUrl": "http://localhost:8089/"
+    }
+  ],
+  "sampleAlleleRequests": [
+    {
+      "referenceName": "test-reference-name",
+      "start": 100,
+      "referenceBases": "T",
+      "alternateBases": "C",
+      "assemblyId": "grch37",
+      "datasetIds": [
+        "variant-test-gt"
+      ],
+      "includeDatasetResponses": true
+    },
+    {
+      "referenceName": "1",
+      "start": 10109,
+      "referenceBases": "A",
+      "alternateBases": "T",
+      "assemblyId": "grch37",
+      "datasetIds": [
+        "variant-test-no-gt"
+      ],
+      "includeDatasetResponses": true
+    }
+  ]
+}
