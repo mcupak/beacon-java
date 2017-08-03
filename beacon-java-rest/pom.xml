@@ -118,14 +118,18 @@
             <artifactId>beacon-adapter-api</artifactId>
         </dependency>
 
-        <!-- Sample Beacon Adapter -->
+         <!--Sample Beacon Adapter-->
+        <!--<dependency>-->
+            <!--<groupId>com.dnastack</groupId>-->
+            <!--<artifactId>sample-beacon-adapter</artifactId>-->
+            <!--<version>${project.version}</version>-->
+        <!--</dependency>-->
+        <!-- End your sample beacon adapter -->
         <dependency>
             <groupId>com.dnastack</groupId>
-            <artifactId>sample-beacon-adapter</artifactId>
-            <version>${project.version}</version>
+            <artifactId>beacon-adapter-variants</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
-        <!-- End your sample beacon adapter -->
-
     </dependencies>
 
     <build>
