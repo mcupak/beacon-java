@@ -176,7 +176,6 @@ public class Ga4ghClient {
     }
 
     public boolean isExistDataset(String datasetId) {
-        System.out.println("datasets: " + ga4ghRetroServices.keySet());
         return ga4ghRetroServices.get(datasetId) != null;
     }
 
