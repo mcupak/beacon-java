@@ -46,11 +46,13 @@ public class VariantsBeaconAdapter implements BeaconAdapter {
 
     @PostConstruct
     public void init() {
-        initAdapter(new AdapterConfig("beacon-variants",
-                VariantsBeaconAdapter.class.getCanonicalName(),
-                Collections.singletonList(new ConfigValue("beaconJsonFile",
-                        System.getProperty("user.home") + File.separator + BEACON_FILE))));
-
+        initAdapter(AdapterConfig.builder().name("beacon-variants")
+                .adapterClass(VariantsBeaconAdapter.class.getCanonicalName())
+                .configValues(Collections.singletonList(ConfigValue.builder()
+                        .name("beaconJsonFile")
+                        .value(System.getProperty("user.home") + File.separator + BEACON_FILE)
+                        .build()))
+                .build());
     }
 
     /**
