@@ -119,13 +119,18 @@
         </dependency>
 
         <!-- Sample Beacon Adapter -->
-        <dependency>
-            <groupId>com.dnastack</groupId>
-            <artifactId>sample-beacon-adapter</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.dnastack</groupId>-->
+            <!--<artifactId>sample-beacon-adapter</artifactId>-->
+            <!--<version>${project.version}</version>-->
+        <!--</dependency>-->
         <!-- End your sample beacon adapter -->
 
+        <dependency>
+            <groupId>com.dnastack</groupId>
+            <artifactId>beacon-adapter-variants</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
