@@ -29,6 +29,7 @@ import com.dnastack.beacon.service.api.BeaconService;
 import org.ga4gh.beacon.Beacon;
 
 import javax.inject.Inject;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -40,16 +41,14 @@ import javax.ws.rs.core.MediaType;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  */
 @Path("/")
+@Consumes({MediaType.APPLICATION_JSON})
+@Produces({MediaType.APPLICATION_JSON})
 public class BeaconInfoImpl implements BeaconInfo {
 
     @Inject
     private BeaconService service;
 
-    /**
-     * {@inheritDoc}
-     */
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
     @Override
     public Beacon info() throws BeaconException {
         return service.queryBeacon();

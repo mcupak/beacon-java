@@ -40,16 +40,14 @@ import java.util.List;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  */
 @Path("/query")
+@Consumes({MediaType.APPLICATION_JSON})
+@Produces({MediaType.APPLICATION_JSON})
 public class BeaconQueryImpl implements BeaconQuery {
 
     @Inject
     private BeaconService service;
 
-    /**
-     * {@inheritDoc}
-     */
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
     @Override
     public BeaconAlleleResponse query(@QueryParam("referenceName") String referenceName, @QueryParam("start") Long start, @QueryParam("referenceBases") String referenceBases, @QueryParam("alternateBases") String alternateBases, @QueryParam("assemblyId") String assemblyId, @QueryParam("datasetIds") List<String> datasetIds, @QueryParam("includeDatasetResponses") Boolean includeDatasetResponses) throws BeaconException {
         return service.queryAllele(referenceName,
@@ -61,12 +59,7 @@ public class BeaconQueryImpl implements BeaconQuery {
                                    includeDatasetResponses);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @POST
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
     @Override
     public BeaconAlleleResponse query(BeaconAlleleRequest request) throws BeaconException {
         return service.queryAllele(request);
