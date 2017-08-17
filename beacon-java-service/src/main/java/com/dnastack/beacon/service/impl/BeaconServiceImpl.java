@@ -23,15 +23,19 @@
  */
 package com.dnastack.beacon.service.impl;
 
+import avro.shaded.com.google.common.collect.ImmutableList;
 import com.dnastack.beacon.adapter.api.BeaconAdapter;
 import com.dnastack.beacon.exceptions.BeaconAlleleRequestException;
 import com.dnastack.beacon.exceptions.BeaconException;
 import com.dnastack.beacon.service.api.BeaconService;
+import com.dnastack.beacon.utils.AdapterConfig;
+import com.dnastack.beacon.utils.ConfigValue;
 import com.dnastack.beacon.utils.Reason;
 import org.ga4gh.beacon.Beacon;
 import org.ga4gh.beacon.BeaconAlleleRequest;
 import org.ga4gh.beacon.BeaconAlleleResponse;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.util.List;
@@ -47,6 +51,69 @@ public class BeaconServiceImpl implements BeaconService {
     @Inject
     private BeaconAdapter adapter;
 
+    @PostConstruct
+    public void initAdapter() {
+        adapter.initAdapter(AdapterConfig.builder()
+                .name("Google Genomics Adapter")
+                .adapterClass("VariantsBeaconAdapter.class")
+                .configValues(ImmutableList.of(
+                        ConfigValue.builder()
+                                .name("apiKey")
+                                .value("AIzaSyCIIzOm0yU2gCLLLUTW6gs0INWp6knvwlE")
+                                .build(),
+                        ConfigValue.builder()
+                                .name("beaconJson")
+                                .value("{\n" +
+                                        "  \"id\": \"sample-beacon\",\n" +
+                                        "  \"name\": \"variant_test_beacon\",\n" +
+                                        "  \"apiVersion\": \"0.3\",\n" +
+                                        "  \"organization\": {\n" +
+                                        "    \"id\": \"variant_org\",\n" +
+                                        "    \"name\": \"variant Adapter organization\",\n" +
+                                        "    \"description\": \"test organization for the variant Beacon adapter\",\n" +
+                                        "    \"address\": \"99 Lambda Drive, Consumer, Canada\",\n" +
+                                        "    \"welcomeUrl\": \"www.welcome.com\",\n" +
+                                        "    \"contactUrl\": \"www.contact.com\",\n" +
+                                        "    \"logoUrl\": \"www.logo.com\"\n" +
+                                        "  },\n" +
+                                        "  \"description\": \"This beacon demonstrates the usage of the variantBeaconAdapter\",\n" +
+                                        "  \"version\": \"1\",\n" +
+                                        "  \"welcomeUrl\": \"www.welcome.com\",\n" +
+                                        "  \"alternativeUrl\": \"www.alternative.com\",\n" +
+                                        "  \"createDateTime\": \"2016/07/23 19:23:11\",\n" +
+                                        "  \"updateDateTime\": \"2016/07/23 19:23:11\",\n" +
+                                        "  \"datasets\": [\n" +
+                                        "    {\n" +
+                                        "      \"id\": \"10473108253681171589\",\n" +
+                                        "      \"name\": \"variant-test-gt\",\n" +
+                                        "      \"description\": \"variant Adapter test dataset which includes sample / gt info\",\n" +
+                                        "      \"assemblyId\": \"test-assembly\",\n" +
+                                        "      \"createDateTime\": \"2016/07/23 19:23:11\",\n" +
+                                        "      \"updateDateTime\": \"2016/07/23 19:23:11\",\n" +
+                                        "      \"version\": \"1\",\n" +
+                                        "      \"variantCount\": 26,\n" +
+                                        "      \"sampleCount\": 1,\n" +
+                                        "      \"externalUrl\": \"https://genomics.googleapis.com/v1/\"\n" +
+                                        "    }\n" +
+                                        "  ],\n" +
+                                        "  \"sampleAlleleRequests\": [\n" +
+                                        "    {\n" +
+                                        "      \"referenceName\": \"1\",\n" +
+                                        "      \"start\": 10176,\n" +
+                                        "      \"referenceBases\": \"A\",\n" +
+                                        "      \"alternateBases\": \"AC\",\n" +
+                                        "      \"assemblyId\": \"GRCh37\",\n" +
+                                        "      \"datasetIds\": [\n" +
+                                        "        \"10473108253681171589\"\n" +
+                                        "      ],\n" +
+                                        "      \"includeDatasetResponses\": true\n" +
+                                        "    }\n" +
+                                        "  ]\n" +
+                                        "}")
+                                .build()))
+                .build());
+    }
+
     /**
      * Validate the beacon fields according to the 0.3.0 beacon specifications
      *
@@ -60,20 +127,20 @@ public class BeaconServiceImpl implements BeaconService {
     private void validateRequest(String referenceName, Long start, String referenceBases, String alternateBases, String assemblyId) throws BeaconAlleleRequestException {
         if (referenceName == null) {
             throw new BeaconAlleleRequestException(Reason.INVALID_REQUEST,
-                                                   "Reference cannot be null. Please provide an appropriate reference name");
+                    "Reference cannot be null. Please provide an appropriate reference name");
         } else if (start == null) {
             throw new BeaconAlleleRequestException(Reason.INVALID_REQUEST,
-                                                   "Start position cannot be null. Please provide a 0-based start position");
+                    "Start position cannot be null. Please provide a 0-based start position");
         } else if (referenceBases == null) {
             throw new BeaconAlleleRequestException(Reason.INVALID_REQUEST, "Reference bases cannot be null");
         } else if (alternateBases == null) {
             throw new BeaconAlleleRequestException(Reason.INVALID_REQUEST, "Alternate bases cannot be null");
         } else if (assemblyId == null) {
             throw new BeaconAlleleRequestException(Reason.INVALID_REQUEST,
-                                                   "AssemblyId cannot be null. Please defined a valid GRCh assembly Id");
+                    "AssemblyId cannot be null. Please defined a valid GRCh assembly Id");
         } else if (!assemblyId.startsWith("GRCh")) {
             throw new BeaconAlleleRequestException(Reason.INVALID_REQUEST,
-                                                   "Invalid assemblyId. Assemblies must be from GRCh builds");
+                    "Invalid assemblyId. Assemblies must be from GRCh builds");
         }
     }
 
@@ -106,10 +173,10 @@ public class BeaconServiceImpl implements BeaconService {
     @Override
     public BeaconAlleleResponse queryAllele(BeaconAlleleRequest request) throws BeaconException {
         validateRequest(request.getReferenceName(),
-                        request.getStart(),
-                        request.getReferenceBases(),
-                        request.getAlternateBases(),
-                        request.getAssemblyId());
+                request.getStart(),
+                request.getReferenceBases(),
+                request.getAlternateBases(),
+                request.getAssemblyId());
 
         if (request.getIncludeDatasetResponses() == null) {
             request.setIncludeDatasetResponses(false);
