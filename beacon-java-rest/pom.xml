@@ -126,11 +126,20 @@
             <!--<version>${project.version}</version>-->
         <!--</dependency>-->
         <!-- End your sample beacon adapter -->
-        <dependency>
-            <groupId>com.dnastack</groupId>
-            <artifactId>beacon-adapter-google-genomics</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
+
+        <!-- Google Genomics Beacon Adapter -->
+        <!--<dependency>-->
+            <!--<groupId>com.dnastack</groupId>-->
+            <!--<artifactId>beacon-adapter-google-genomics</artifactId>-->
+            <!--<version>1.0-SNAPSHOT</version>-->
+        <!--</dependency>-->
+
+        <!-- Phenopackets Beacon Adapter -->
+        <!--<dependency>-->
+            <!--<groupId>com.dnastack</groupId>-->
+            <!--<artifactId>beacon-adapter-phenopackets</artifactId>-->
+            <!--<version>1.0-SNAPSHOT</version>-->
+        <!--</dependency>-->
     </dependencies>
 
     <build>
