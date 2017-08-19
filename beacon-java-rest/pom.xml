@@ -120,11 +120,11 @@
         </dependency>
 
         <!-- Sample Beacon Adapter -->
-        <!--<dependency>-->
-            <!--<groupId>com.dnastack</groupId>-->
-            <!--<artifactId>sample-beacon-adapter</artifactId>-->
-            <!--<version>${project.version}</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>com.dnastack</groupId>
+            <artifactId>sample-beacon-adapter</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- End your sample beacon adapter -->
 
         <!-- Google Genomics Beacon Adapter -->
