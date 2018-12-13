@@ -73,12 +73,14 @@ public class BeaconTests {
 
     @Deployment(testable = false)
     public static WebArchive createDeployment() {
-        WebArchive war = ShrinkWrap.create(MavenImporter.class)
-                                   .loadPomFromFile("pom.xml")
-                                   .importBuildOutput()
-                                   .as(WebArchive.class);
-        System.out.println("WAR name: " + war.getName());
-        return war;
+        try {
+            WebArchive war = ShrinkWrap.create(MavenImporter.class).loadPomFromFile("pom.xml").importBuildOutput().as(WebArchive.class);
+            System.out.println("WAR name: " + war.getName());
+            return war;
+        } catch (Exception e){
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     /**
@@ -86,7 +88,7 @@ public class BeaconTests {
      */
     @Test
     public void testGetBeacon() {
-
+        System.out.print(baseUrl);
         Beacon beacon = given().accept(ContentType.JSON)
                                .get(baseUrl)
                                .then()

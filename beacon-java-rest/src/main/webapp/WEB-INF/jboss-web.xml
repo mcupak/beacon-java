@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jboss-web>
-    <context-root>/beacon-java</context-root>
+    <context-root>/api/ga4gh/beacon/v0.3</context-root>
 </jboss-web>

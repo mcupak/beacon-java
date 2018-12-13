@@ -54,6 +54,7 @@
             <artifactId>beacon</artifactId>
             <version>${version.beacon.api}</version>
         </dependency>
+
         <dependency>
             <groupId>com.dnastack</groupId>
             <artifactId>beacon-adapter-api</artifactId>

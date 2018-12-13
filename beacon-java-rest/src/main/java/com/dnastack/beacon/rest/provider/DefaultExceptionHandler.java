@@ -24,6 +24,7 @@
 package com.dnastack.beacon.rest.provider;
 
 import com.dnastack.beacon.rest.util.ResponseMappingResource;
+import lombok.extern.jbosslog.JBossLog;
 import org.ga4gh.beacon.BeaconError;
 import org.json.simple.JSONObject;
 
@@ -38,6 +39,7 @@ import javax.ws.rs.ext.Provider;
  * @author patmagee
  */
 @Provider
+@JBossLog
 public class DefaultExceptionHandler implements ExceptionMapper<Exception> {
 
     /**
@@ -49,9 +51,7 @@ public class DefaultExceptionHandler implements ExceptionMapper<Exception> {
      */
     @Override
     public Response toResponse(Exception e) {
-        JSONObject json = new JSONObject();
         Response.Status s = ResponseMappingResource.getStatus(e);
-
         BeaconError error = new BeaconError();
         error.setMessage(e.getMessage());
         error.setErrorCode(s.getStatusCode());

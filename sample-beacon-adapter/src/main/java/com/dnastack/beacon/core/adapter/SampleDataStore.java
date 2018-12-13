@@ -22,7 +22,7 @@
  *  THE SOFTWARE.
  */
 
-package com.dnastack.beacon.core.adapter.impl;
+package com.dnastack.beacon.core.adapter;
 
 import java.util.HashMap;
 import java.util.Map;

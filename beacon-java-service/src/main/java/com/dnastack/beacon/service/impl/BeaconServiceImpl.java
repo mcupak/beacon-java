@@ -27,6 +27,7 @@ import com.dnastack.beacon.adapter.api.BeaconAdapter;
 import com.dnastack.beacon.exceptions.BeaconAlleleRequestException;
 import com.dnastack.beacon.exceptions.BeaconException;
 import com.dnastack.beacon.service.api.BeaconService;
+import com.dnastack.beacon.service.api.FactoryProvided;
 import com.dnastack.beacon.utils.Reason;
 import org.ga4gh.beacon.Beacon;
 import org.ga4gh.beacon.BeaconAlleleRequest;
@@ -44,7 +45,7 @@ import java.util.List;
 @RequestScoped
 public class BeaconServiceImpl implements BeaconService {
 
-    @Inject
+    @Inject @FactoryProvided
     private BeaconAdapter adapter;
 
     /**
@@ -71,9 +72,6 @@ public class BeaconServiceImpl implements BeaconService {
         } else if (assemblyId == null) {
             throw new BeaconAlleleRequestException(Reason.INVALID_REQUEST,
                                                    "AssemblyId cannot be null. Please defined a valid GRCh assembly Id");
-        } else if (!assemblyId.startsWith("GRCh")) {
-            throw new BeaconAlleleRequestException(Reason.INVALID_REQUEST,
-                                                   "Invalid assemblyId. Assemblies must be from GRCh builds");
         }
     }
 

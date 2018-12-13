@@ -21,21 +21,20 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-package com.dnastack.beacon.core.adapter.impl;
+package com.dnastack.beacon.core.adapter;
 
 import com.dnastack.beacon.adapter.api.BeaconAdapter;
 import com.dnastack.beacon.exceptions.BeaconException;
 import com.dnastack.beacon.utils.AdapterConfig;
 import org.ga4gh.beacon.*;
 
-import javax.annotation.PostConstruct;
-import javax.ejb.Singleton;
+import javax.inject.Named;
 import java.util.*;
 
 /**
  * @author patrickmagee
  */
-@Singleton
+@Named("sample")
 public class SampleBeaconAdapterImpl implements BeaconAdapter {
 
     public static final String API_VERSION = "0.3.0";
@@ -172,10 +171,6 @@ public class SampleBeaconAdapterImpl implements BeaconAdapter {
 
     }
 
-    @PostConstruct
-    public void init() {
-        initAdapter(null);
-    }
 
     @Override
     public void initAdapter(AdapterConfig adapterConfig) {
